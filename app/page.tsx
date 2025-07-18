@@ -14,13 +14,13 @@ export default function HelloWorldPage() {
             </div>
           </div>
           <CardTitle className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-            Hello World!
+            Style Gene AI
           </CardTitle>
-          <CardDescription className="text-lg text-gray-600">Welcome to your new Next.js application</CardDescription>
+          <CardDescription className="text-lg text-gray-600">Your AI-powered style companion</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <p className="text-gray-700">
-            This is your first step into the world of web development. Ready to build something amazing?
+            Transform your style with the power of artificial intelligence. Ready to discover your perfect look?
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
@@ -28,7 +28,7 @@ export default function HelloWorldPage() {
             </Button>
             <Button variant="outline">Learn More</Button>
           </div>
-          <div className="text-sm text-gray-500 pt-4 border-t">Built with ❤️ using Next.js & Tailwind CSS</div>
+          <div className="text-sm text-gray-500 pt-4 border-t">Built with ❤️ using AI & Next.js</div>
         </CardContent>
       </Card>
     </div>
