@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { ArrowLeft, Search, Sparkles, Plus, BarChart3, Heart, Trash2, Info, Filter, Grid3X3, List, Edit, Upload, X } from "lucide-react"
 import Link from "next/link"
 import { type WardrobeItem } from "@/lib/supabase"
-import { wardrobeService } from "@/lib/supabase"
+import { wardrobeService, wardrobeProfileService } from "@/lib/supabase"
 import { useAuth } from "@/hooks/useAuth"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -20,11 +20,14 @@ function WardrobeContent() {
   const [wardrobeItems, setWardrobeItems] = useState<WardrobeItem[]>([])
   const [initialized, setInitialized] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [currentProfile, setCurrentProfile] = useState<any>(null)
 
   const { user, signOut } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
   const searchParam = searchParams?.get("search")
+  const profileParam = searchParams?.get("profile")
+  const userIdParam = searchParams?.get("userId") // For viewing other users' wardrobes
 
   const categories = ["all", "dresses", "tops", "bottoms", "shoes", "outerwear", "accessories"]
 
@@ -87,11 +90,29 @@ function WardrobeContent() {
   useEffect(() => {
     if (!initialized && user) {
       loadWardrobeData()
+      loadProfileData()
       setInitialized(true)
     } else if (!user) {
       setLoading(false)
     }
-  }, [initialized, user])
+  }, [initialized, user, profileParam, userIdParam])
+
+  const loadProfileData = async () => {
+    if (!user || !profileParam) return
+    
+    try {
+      // Determine which user's profiles to load
+      const targetUserId = userIdParam || user.id
+      
+      // Load profile information from database
+      const profiles = await wardrobeProfileService.getWardrobeProfiles(targetUserId)
+      const profile = profiles?.find(p => p.id === profileParam)
+      setCurrentProfile(profile)
+      console.log("Loaded profile data:", profile)
+    } catch (error) {
+      console.error("Error loading profile data:", error)
+    }
+  }
 
   const loadWardrobeData = async () => {
     if (!user) {
@@ -102,9 +123,61 @@ function WardrobeContent() {
     try {
       setLoading(true)
       console.log("Loading wardrobe from Supabase database...")
-      const items = await wardrobeService.getWardrobeItems(user.id)
-      setWardrobeItems(items || [])
-      console.log(`Loaded ${items?.length || 0} items from database`)
+      
+      // Determine which user's wardrobe to load
+      let targetUserId = user.id // Default to authenticated user
+      let wardrobeOwnerInfo = `main wardrobe`
+      let profileIdToFilter: string | undefined = undefined
+      
+      // Check if we're viewing a different user's wardrobe
+      if (userIdParam) {
+        targetUserId = userIdParam
+        wardrobeOwnerInfo = `user ${userIdParam}'s wardrobe`
+        console.log("Loading different user's wardrobe:", userIdParam)
+      } else if (profileParam) {
+        // If viewing a specific profile, we need to determine the correct approach
+        console.log("Loading profile-specific wardrobe for profile:", profileParam)
+        const profiles = await wardrobeProfileService.getWardrobeProfiles(user.id)
+        const profile = profiles?.find(p => p.id === profileParam)
+        
+        if (profile) {
+          console.log("Found profile:", profile.name, "- loading their wardrobe items")
+          wardrobeOwnerInfo = `profile ${profile.name}'s wardrobe`
+          
+          // For wardrobe profiles, we filter by wardrobe_profile_id
+          // The items still belong to the authenticated user but are associated with the profile
+          targetUserId = user.id
+          profileIdToFilter = profileParam
+        } else {
+          console.warn("Profile not found:", profileParam)
+        }
+      }
+      
+      console.log("Target user ID:", targetUserId)
+      console.log("Profile ID:", profileParam || "none")
+      
+      // Run debug connection test first
+      await wardrobeService.debugConnection(targetUserId)
+      
+      try {
+        // Load items for specific user/profile or main wardrobe
+        console.log("Attempting to load wardrobe items with:", { userId: targetUserId, profileId: profileIdToFilter })
+        const items = await wardrobeService.getWardrobeItems(targetUserId, profileIdToFilter)
+        
+        // If viewing a profile but no profile-specific items exist, show all user items as fallback
+        if (profileIdToFilter && (!items || items.length === 0)) {
+          console.log(`No items found for profile ${profileIdToFilter}, showing all user items as fallback`)
+          const fallbackItems = await wardrobeService.getWardrobeItems(targetUserId, undefined)
+          setWardrobeItems(fallbackItems || [])
+          console.log(`Loaded ${fallbackItems?.length || 0} fallback items from database for ${wardrobeOwnerInfo}`)
+        } else {
+          setWardrobeItems(items || [])
+          console.log(`Loaded ${items?.length || 0} items from database for ${wardrobeOwnerInfo}`)
+        }
+      } catch (loadError) {
+        console.error("Error loading wardrobe items:", loadError)
+        setWardrobeItems([])
+      }
     } catch (error) {
       console.error("Error loading wardrobe from database:", error)
       setWardrobeItems([])
@@ -372,12 +445,21 @@ function WardrobeContent() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link href="/">
-                <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-100">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Home
-                </Button>
-              </Link>
+              {searchParams?.get("returnTo") === "chat" ? (
+                <Link href="/">
+                  <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-100">
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Back to Chat
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/">
+                  <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-100">
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Back to Home
+                  </Button>
+                </Link>
+              )}
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-white" />
@@ -404,7 +486,7 @@ function WardrobeContent() {
                   </Button>
                 </>
               )}
-              <Link href="/add-clothes">
+              <Link href={profileParam ? `/add-clothes?profile=${profileParam}` : "/add-clothes"}>
                 <Button className="bg-teal-500 hover:bg-teal-600 text-white shadow-lg">
                   <Plus className="w-4 h-4 mr-2" />
                   Add New Item
@@ -417,6 +499,73 @@ function WardrobeContent() {
 
       <div className="container mx-auto px-6 py-8">
 
+
+        {/* Profile Header */}
+        {currentProfile && (
+          <div className="mb-8">
+            <Card className="border-gray-700 bg-gray-800">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full flex items-center justify-center">
+                    {currentProfile.profile_picture_url ? (
+                      <img
+                        src={currentProfile.profile_picture_url}
+                        alt={currentProfile.name}
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    ) : (
+                      <span className="text-2xl font-bold text-white">
+                        {currentProfile.name.charAt(0).toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">{currentProfile.name}'s Wardrobe</h2>
+                    {currentProfile.relation && (
+                      <p className="text-gray-400 capitalize">{currentProfile.relation}</p>
+                    )}
+                    {currentProfile.age && (
+                      <p className="text-gray-400">{currentProfile.age} years old</p>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Empty Wardrobe Message */}
+        {wardrobeItems.length === 0 && !loading && (
+          <div className="text-center py-16">
+            <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Sparkles className="w-10 h-10 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-100 mb-2">
+              {currentProfile ? `${currentProfile.name}'s wardrobe is empty` : "Your wardrobe is empty"}
+            </h3>
+            <p className="text-gray-500 mb-6">
+              {currentProfile 
+                ? `This is ${currentProfile.name}'s personal wardrobe. Items added here will be separate from your main wardrobe.`
+                : "Start adding clothes to your wardrobe to see them here."
+              }
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link href={profileParam ? `/add-clothes?profile=${profileParam}` : "/add-clothes"}>
+                <Button className="bg-teal-500 hover:bg-teal-600 text-white">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add New Item
+                </Button>
+              </Link>
+              {currentProfile && (
+                <Link href="/wardrobe">
+                  <Button variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+                    View Main Wardrobe
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Statistics */}
         {Object.keys(stats).length > 0 && (

@@ -10,9 +10,9 @@ export default function AuthPage() {
   const router = useRouter()
 
   useEffect(() => {
-    // If user is already authenticated, redirect to wardrobe
+    // If user is already authenticated, redirect to home page
     if (user && !loading) {
-      router.push("/wardrobe")
+      router.push("/home");
     }
   }, [user, loading, router])
 

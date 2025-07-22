@@ -11,13 +11,15 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Upload, X, Plus, Sparkles } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 import { wardrobeService, type Category, type Tag } from "@/lib/supabase"
 import { useAuth } from "@/hooks/useAuth"
 
 export default function AddClothesPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const profileParam = searchParams?.get("profile")
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -102,6 +104,7 @@ export default function AddClothesPage() {
       const newItem = {
         user_id: user.id,
         category_id: selectedCategory.id,
+        wardrobe_profile_id: profileParam || undefined,
         name: formData.name,
         description: formData.description,
         brand: formData.brand || "",
@@ -153,7 +156,7 @@ export default function AddClothesPage() {
       }
       
       alert("Item added successfully!")
-      router.push("/wardrobe")
+      router.push(profileParam ? `/wardrobe?profile=${profileParam}` : "/wardrobe")
     } catch (error) {
       console.error("Error saving item:", error)
       alert(`Failed to save item: ${error instanceof Error ? error.message : 'Unknown error'}`)
@@ -171,7 +174,7 @@ export default function AddClothesPage() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-4">
-              <Link href="/wardrobe">
+              <Link href={profileParam ? `/wardrobe?profile=${profileParam}` : "/wardrobe"}>
                 <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-100">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Wardrobe
@@ -535,7 +538,7 @@ export default function AddClothesPage() {
                       </>
                     )}
                   </Button>
-                  <Link href="/wardrobe">
+                  <Link href={profileParam ? `/wardrobe?profile=${profileParam}` : "/wardrobe"}>
                     <Button
                       type="button"
                       variant="outline"

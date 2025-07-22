@@ -1,80 +1,18 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Sparkles, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
+import { Sparkles, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false)
   const [activeSection, setActiveSection] = useState("features")
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const carouselRef = useRef<HTMLDivElement>(null)
-  
-  // Images for the carousel - using placeholder images with descriptive text
-  const audienceImages = [
-    {
-      src: "https://placehold.co/800x400/e6f7ff/0066cc?text=Mom+helping+child+get+ready+for+school", 
-      alt: "Mother helping child get ready for school",
-      caption: "Morning routines made easier"
-    },
-    {
-      src: "https://placehold.co/800x400/fff5e6/cc7700?text=Mom+helping+child+with+shoes", 
-      alt: "Mother helping child with shoes",
-      caption: "Simplified daily dressing"
-    },
-    {
-      src: "https://placehold.co/800x400/f5e6ff/7700cc?text=Mom+and+daughter+choosing+outfits", 
-      alt: "Mother and daughter choosing outfits",
-      caption: "Special occasion outfit planning"
-    },
-    {
-      src: "https://placehold.co/800x400/e6ffee/00cc77?text=Mom+and+child+sharing+a+moment", 
-      alt: "Mother and child sharing a moment",
-      caption: "More time for what matters"
-    }
-  ]
 
   useEffect(() => {
     setIsVisible(true)
-    
-    // Auto-slide the carousel
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 5000);
-    
-    return () => clearInterval(interval);
   }, [])
-  
-  const scrollToSection = (sectionId: string) => {
-    setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-  
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-    if (carouselRef.current) {
-      const slideWidth = carouselRef.current.offsetWidth;
-      carouselRef.current.scrollTo({
-        left: slideWidth * index,
-        behavior: 'smooth'
-      });
-    }
-  };
-  
-  const nextSlide = () => {
-    const newIndex = (currentSlide + 1) % audienceImages.length;
-    goToSlide(newIndex);
-  };
-  
-  const prevSlide = () => {
-    const newIndex = (currentSlide - 1 + audienceImages.length) % audienceImages.length;
-    goToSlide(newIndex);
-  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -92,19 +30,19 @@ export default function LandingPage() {
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <button 
-                onClick={() => scrollToSection("audience")}
+                onClick={() => setActiveSection("audience")}
                 className={`text-sm font-medium ${activeSection === "audience" ? "text-blue-500" : "text-gray-600 hover:text-blue-500"}`}
               >
                 Our audience
               </button>
               <button 
-                onClick={() => scrollToSection("features")}
+                onClick={() => setActiveSection("features")}
                 className={`text-sm font-medium ${activeSection === "features" ? "text-blue-500" : "text-gray-600 hover:text-blue-500"}`}
               >
                 Features
               </button>
               <button 
-                onClick={() => scrollToSection("how")}
+                onClick={() => setActiveSection("how")}
                 className={`text-sm font-medium ${activeSection === "how" ? "text-blue-500" : "text-gray-600 hover:text-blue-500"}`}
               >
                 How it works
@@ -201,92 +139,6 @@ export default function LandingPage() {
                 <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-blue-100 rounded-full"></div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Our Audience Section */}
-      <section id="audience" className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Made for Moms and Teens
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Style Genie helps busy moms manage wardrobes for the whole family and empowers teens to develop their own style
-            </p>
-          </div>
-          
-          {/* Image Carousel */}
-          <div className="relative max-w-5xl mx-auto">
-            {/* Carousel Container */}
-            <div 
-              ref={carouselRef}
-              className="flex overflow-x-hidden snap-x snap-mandatory"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {audienceImages.map((image, index) => (
-                <div 
-                  key={index} 
-                  className="min-w-full flex-shrink-0 snap-center px-4"
-                >
-                  <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100">
-                    <div className="aspect-w-16 aspect-h-9 relative">
-                      <div className="w-full h-[400px] bg-gray-100 flex items-center justify-center overflow-hidden">
-                        {/* Using Next.js Image component for better image loading */}
-                        <div className="relative w-full h-full">
-                          <img 
-                            src={image.src}
-                            alt={image.alt}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <p className="text-gray-700 font-medium text-lg text-center">{image.caption}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            {/* Navigation Arrows */}
-            <button 
-              onClick={prevSlide}
-              className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md z-10"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft className="w-6 h-6 text-blue-500" />
-            </button>
-            
-            <button 
-              onClick={nextSlide}
-              className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md z-10"
-              aria-label="Next slide"
-            >
-              <ChevronRight className="w-6 h-6 text-blue-500" />
-            </button>
-            
-            {/* Navigation Dots */}
-            <div className="flex justify-center mt-6">
-              {audienceImages.map((_, index) => (
-                <button 
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 mx-1 rounded-full transition-colors ${currentSlide === index ? 'bg-blue-500' : 'bg-gray-300 hover:bg-gray-400'}`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-          
-          <div className="mt-12 text-center">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-4">Perfect for the Whole Family</h3>
-            <p className="text-gray-600 max-w-3xl mx-auto">
-              Whether you're a busy mom managing multiple wardrobes, a teen developing your personal style, 
-              or anyone looking to simplify your clothing decisions, Style Genie is designed with you in mind.
-            </p>
           </div>
         </div>
       </section>
