@@ -13,23 +13,23 @@ This design addresses critical user interface and authentication improvements fo
 - **Error Boundary Components**: Centralized error handling and user feedback
 
 ### Authentication Flow
-```
+\`\`\`
 User Login → Session Management → Navigation Updates → Logout Option Available
      ↓                ↓                    ↓                      ↓
 Auth Context → Persistent Storage → UI State Updates → Session Cleanup
-```
+\`\`\`
 
 ### Image Storage Flow
-```
+\`\`\`
 Image Upload → Validation → Supabase Storage → URL Generation → Database Update
      ↓             ↓              ↓               ↓               ↓
 File Check → Size/Type → Bucket Storage → Public URL → Item Association
-```
+\`\`\`
 
 ## Components and Interfaces
 
 ### 1. Fixed HomePage Component
-```typescript
+\`\`\`typescript
 interface HomePageProps {
   // No props needed - uses auth context
 }
@@ -55,10 +55,10 @@ const HomePage = () => {
   
   return <MainInterface />
 }
-```
+\`\`\`
 
 ### 2. Enhanced Navigation Component
-```typescript
+\`\`\`typescript
 interface NavigationProps {
   user: User | null
   onSignOut: () => Promise<void>
@@ -80,10 +80,10 @@ const Navigation = ({ user, onSignOut, currentPage }: NavigationProps) => {
     </nav>
   )
 }
-```
+\`\`\`
 
 ### 3. Image Storage Service
-```typescript
+\`\`\`typescript
 interface ImageStorageService {
   uploadImage(file: File, userId: string, itemId: string): Promise<ImageUploadResult>
   deleteImage(imagePath: string): Promise<void>
@@ -106,10 +106,10 @@ class SupabaseImageService implements ImageStorageService {
   async deleteImage(imagePath: string): Promise<void>
   getImageUrl(imagePath: string): string
 }
-```
+\`\`\`
 
 ### 4. Error Handling Components
-```typescript
+\`\`\`typescript
 interface ErrorBoundaryState {
   hasError: boolean
   error?: Error
@@ -126,12 +126,12 @@ interface ErrorDisplayProps {
 const ErrorDisplay = ({ error, onRetry, type }: ErrorDisplayProps) => {
   // Render appropriate error UI based on type
 }
-```
+\`\`\`
 
 ## Data Models
 
 ### Enhanced User Context
-```typescript
+\`\`\`typescript
 interface AuthContextType {
   user: { id: string; email: string } | null
   loading: boolean
@@ -143,10 +143,10 @@ interface AuthContextType {
   lastError: string | null
   clearError: () => void
 }
-```
+\`\`\`
 
 ### Image Storage Models
-```typescript
+\`\`\`typescript
 interface StoredImage {
   id: string
   wardrobe_item_id: string
@@ -162,7 +162,7 @@ interface ImageUploadOptions {
   allowedTypes?: string[]
   generateThumbnail?: boolean
 }
-```
+\`\`\`
 
 ## Error Handling
 
