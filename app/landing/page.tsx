@@ -17,60 +17,73 @@ export default function LandingPage() {
     {
       src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-anastasia-shuraeva-8084471.jpg-TKVOJAiWQxAUx5npOxeZtJYTK7Z3Mi.jpeg",
       alt: "Mother and daughter in modern closet, mom helping daughter choose outfit",
-      caption: "Creating stylish looks together",
     },
     {
       src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-rdne-7104238.jpg-qXwBrU2bAbJaMU5Z1btG5zUYSoTigJ.jpeg",
       alt: "Two young girls in bedroom, one helping the other get dressed",
-      caption: "Sister helping with morning routine",
     },
     {
       src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-yankrukov-6209525.jpg-Vz3V0htY3IvPilE1BY2bzWev7HKWHo.jpeg",
       alt: "Mother dressing baby in yellow outfit on bed",
-      caption: "Tender moments dressing little ones",
     },
     {
       src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-arina-krasnikova-5103911.jpg-9M9SwDkEgxjcjEcktf74MMiVyBE140.jpeg",
       alt: "Mother helping toddler get dressed in neutral clothing",
-      caption: "Building independence through dressing",
     },
     {
       src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-anastasia-shuraeva-8084488.jpg-IHNGE5CK8VIWD1LyPJjdsDtboHYSWJ.jpeg",
       alt: "Mother and child in walk-in closet, mom helping with outfit selection",
-      caption: "Organized wardrobe, happy family",
     },
     {
       src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-august-de-richelieu-4260756.jpg-BwzyoAlDDn6xnhqxKywW1wnl3gM0hr.jpeg",
       alt: "Mother helping young boy with checkered shirt during getting ready routine",
-      caption: "Making getting ready fun and easy",
     },
     {
       src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-august-de-richelieu-4261265.jpg-uHXyt6SSEb0yToqNSYpu0B87ANhgqO.jpeg",
       alt: "Mother helping child with face mask, modern parenting moment",
-      caption: "Caring for every detail",
     },
   ]
 
   const teenImages = [
     {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-koolshooters-8956121.jpg-ZDxeyxsZofyWMY4FHnbooXGJc3TDt3.jpeg",
+      alt: "Teen girl looking in mirror while getting ready, checking her outfit",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-cottonbro-6068956.jpg-tgUhoF0P95lXMlAOFDmVid153YCxmt.jpeg",
+      alt: "Teen girl browsing clothes in a modern retail store",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-cottonbro-6068971.jpg-e8MFPtfp1aNbcBGKt6BxSpQFIicYYM.jpeg",
+      alt: "Teen examining clothing patterns and textures while shopping",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-ron-lach-8386666.jpg-MbfUFqnW9Vq34RYFtDG9XCsGbnw5bN.jpeg",
+      alt: "Two teen friends shopping together in a bright clothing store",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-cottonbro-6069552.jpg-UjRCSmEAX1OXA8fLlVAbizSphpGQhG.jpeg",
+      alt: "Teen friends examining a coat together while shopping",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pexels-rdne-5699243.jpg-dX3iq2VnlCsKzUwcSN4dMp9SykciP8.jpeg",
+      alt: "Teen hands browsing through clothing on hangers in store",
+    },
+    {
       src: "https://plus.unsplash.com/premium_photo-1663957982967-90208afa3bba?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c2Nob29sJTIwdGVlbnN8ZW58MHx8MHx8fDA%3D",
       alt: "Group of diverse teenagers with different personal styles",
-      caption: "Teens expressing their unique style",
     },
     {
       src: "https://plus.unsplash.com/premium_photo-1663089610389-21871eb04310?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c2Nob29sJTIwdGVlbnN8ZW58MHx8MHx8fDA%3D",
       alt: "School teens showcasing their individual fashion choices",
-      caption: "Building confidence through style",
     },
     {
       src: "https://images.unsplash.com/photo-1549057446-9f5c6ac91a04?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8dGVlbnN8ZW58MHx8MHx8fDA%3D",
       alt: "Teenagers exploring fashion and personal style choices",
-      caption: "Discovering personal style",
     },
     {
       src: "https://plus.unsplash.com/premium_photo-1727967290081-c50ae33dbc3d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dGVlbnMlMjBkcmVzc2luZ3xlbnwwfHwwfHx8MA%3D%3D",
       alt: "Teens getting dressed and developing their fashion sense",
-      caption: "Teen style development",
     },
   ]
 
@@ -85,7 +98,21 @@ export default function LandingPage() {
       nextSlide()
     }, 5000)
 
-    return () => clearInterval(interval)
+    // Keyboard navigation
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        prevSlide()
+      } else if (event.key === "ArrowRight") {
+        nextSlide()
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      clearInterval(interval)
+      window.removeEventListener("keydown", handleKeyDown)
+    }
   }, [])
 
   // Reset slide when audience type changes
@@ -406,11 +433,6 @@ export default function LandingPage() {
               <div key={`${audienceType}-${index}`} className="min-w-full h-full flex-shrink-0 snap-center relative">
                 {/* Full Screen Background Image */}
                 <img src={image.src || "/placeholder.svg"} alt={image.alt} className="w-full h-full object-cover" />
-
-                {/* Optional overlay with caption */}
-                <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 bg-black/30 backdrop-blur-sm rounded-lg px-6 py-3">
-                  <p className="text-white text-lg font-medium text-center">{image.caption}</p>
-                </div>
               </div>
             ))}
           </div>
