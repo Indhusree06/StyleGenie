@@ -1,6 +1,6 @@
-# Weather Smart Wardrobe Profile Migration Guide
+# StyleGenie Wardrobe Profile Migration Guide
 
-This guide will help you set up separate wardrobes for each family member in your Weather Smart application.
+This guide will help you set up separate wardrobes for each family member in your StyleGenie application.
 
 ## 🎯 What This Migration Does
 
@@ -60,7 +60,7 @@ After running the migration, verify it worked:
    - Look for the new `wardrobe_profile_id` column
 
 2. **Test the application**:
-   - Refresh your Weather Smart app
+   - Refresh your StyleGenie app
    - Go to `/wardrobes` page
    - Create a new family member profile
    - Add items to their wardrobe

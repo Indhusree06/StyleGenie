@@ -150,8 +150,7 @@ export default function LandingPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Smart Features for Your Wardrobe</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Weather Smart combines AI technology with your family's personal style to create the perfect wardrobe
-              experience for everyone
+              Weather Smart combines AI technology with your personal style to create the perfect wardrobe experience
             </p>
           </div>
 

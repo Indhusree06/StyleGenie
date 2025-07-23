@@ -263,10 +263,10 @@ export default function LandingPage() {
       <section id="audience" className="py-20 bg-gray-900">
         <div className="container mx-auto px-6">
           <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Made for Families</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Made for Moms and Teens</h2>
             <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-12">
-              Weather Smart helps families manage wardrobes for everyone and empowers each family member to develop
-              their own personal style
+              Weather Smart helps busy moms manage wardrobes for the whole family and empowers teens to develop their
+              own style
             </p>
 
             {/* Audience Selection Buttons - Dark Style */}

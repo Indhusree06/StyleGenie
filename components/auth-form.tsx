@@ -39,8 +39,12 @@ export function AuthForm() {
       if (result.error) {
         setError(result.error.message)
       } else {
-        // Redirect to home page after successful auth
-        router.push("/home")
+        // Redirect to profile setup for new users, home for existing users
+        if (isSignUp) {
+          router.push("/profile-setup")
+        } else {
+          router.push("/home")
+        }
       }
     } catch (err) {
       setError("An unexpected error occurred")
@@ -83,7 +87,7 @@ export function AuthForm() {
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Sparkles className="w-8 h-8 text-black" />
               </div>
-              <h1 className="text-2xl font-bold text-white mb-2">Welcome to Style Genie</h1>
+              <h1 className="text-2xl font-bold text-white mb-2">Welcome to Weather Smart</h1>
               <p className="text-gray-400">Your AI-powered wardrobe assistant</p>
             </div>
 
@@ -180,7 +184,7 @@ export function AuthForm() {
             {/* Demo Credentials */}
             <div className="mt-8 text-center">
               <p className="text-gray-500 text-sm mb-2">Demo credentials for testing:</p>
-              <p className="text-gray-400 text-xs">Email: demo@stylegenie.com | Password: demo123</p>
+              <p className="text-gray-400 text-xs">Email: demo@weathersmart.com | Password: demo123</p>
             </div>
           </CardContent>
         </Card>

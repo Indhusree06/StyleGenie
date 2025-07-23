@@ -1,6 +1,6 @@
-# Weather Smart AI - Smart Wardrobe Management
+# StyleGenie AI - Smart Wardrobe Management
 
-Weather Smart AI is an intelligent wardrobe management system that helps you organize your clothing, get personalized outfit recommendations, and manage wardrobes for your entire family.
+StyleGenie AI is an intelligent wardrobe management system that helps you organize your clothing, get personalized outfit recommendations, and manage wardrobes for your entire family.
 
 ## 🌟 Features
 
@@ -47,7 +47,7 @@ Weather Smart AI is an intelligent wardrobe management system that helps you org
 1. **Clone the repository**:
    \`\`\`bash
    git clone <your-repo-url>
-   cd weathersmart-ai
+   cd stylegenie-ai
    \`\`\`
 
 2. **Install dependencies**:
@@ -71,9 +71,6 @@ Weather Smart AI is an intelligent wardrobe management system that helps you org
    
    # Run the wardrobe profiles migration
    npm run migrate:wardrobe-profiles
-
-   # (Optional) Add sample data for testing
-   npm run db:seed
    \`\`\`
 
 5. **Start the development server**:
@@ -81,7 +78,7 @@ Weather Smart AI is an intelligent wardrobe management system that helps you org
    npm run dev
    \`\`\`
 
-6. **Open your browser** and navigate to `http://localhost:3003`
+6. **Open your browser** and navigate to `http://localhost:3000`
 
 ## 🗄️ Database Setup
 
@@ -112,7 +109,7 @@ The app uses these main tables:
 ## Project Structure
 
 \`\`\`
-weathersmart-ai/
+stylegenie-ai/
 ├── app/                    # Next.js app directory
 │   ├── api/               # API routes
 │   ├── auth/              # Authentication pages

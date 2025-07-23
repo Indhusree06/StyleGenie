@@ -4,13 +4,100 @@ const supabaseUrl = "https://xypmyqpkmnjbdbsfrgco.supabase.co"
 const supabaseAnonKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5cG15cXBrbW5qYmRic2ZyZ2NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1ODkwMDUsImV4cCI6MjA2ODE2NTAwNX0.qs9IcBdpdzypjEulWtkSscr_mcPtXaDaR2WNXj5HRGE"
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: true,
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+// Auth service
+export const authService = {
+  async signUp(email: string, password: string) {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    })
+    return { data, error }
   },
-})
+
+  async signIn(email: string, password: string) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    return { data, error }
+  },
+
+  async signOut() {
+    const { error } = await supabase.auth.signOut()
+    return { error }
+  },
+
+  async getCurrentUser() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    return user
+  },
+
+  onAuthStateChange(callback: (event: string, session: any) => void) {
+    return supabase.auth.onAuthStateChange(callback)
+  },
+}
+
+// Database service
+export const dbService = {
+  // Wardrobe items
+  async getWardrobeItems(userId: string) {
+    const { data, error } = await supabase.from("wardrobe_items").select("*").eq("user_id", userId)
+    return { data, error }
+  },
+
+  async addWardrobeItem(item: any) {
+    const { data, error } = await supabase.from("wardrobe_items").insert([item]).select()
+    return { data, error }
+  },
+
+  async updateWardrobeItem(id: string, updates: any) {
+    const { data, error } = await supabase.from("wardrobe_items").update(updates).eq("id", id).select()
+    return { data, error }
+  },
+
+  async deleteWardrobeItem(id: string) {
+    const { error } = await supabase.from("wardrobe_items").delete().eq("id", id)
+    return { error }
+  },
+
+  // User profiles
+  async getUserProfile(userId: string) {
+    const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single()
+    return { data, error }
+  },
+
+  async updateUserProfile(userId: string, updates: any) {
+    const { data, error } = await supabase.from("profiles").update(updates).eq("id", userId).select()
+    return { data, error }
+  },
+
+  async createUserProfile(profile: any) {
+    const { data, error } = await supabase.from("profiles").insert([profile]).select()
+    return { data, error }
+  },
+}
+
+// Storage service
+export const storageService = {
+  async uploadImage(bucket: string, path: string, file: File) {
+    const { data, error } = await supabase.storage.from(bucket).upload(path, file)
+    return { data, error }
+  },
+
+  async getPublicUrl(bucket: string, path: string) {
+    const { data } = supabase.storage.from(bucket).getPublicUrl(path)
+    return data.publicUrl
+  },
+
+  async deleteImage(bucket: string, path: string) {
+    const { error } = await supabase.storage.from(bucket).remove([path])
+    return { error }
+  },
+}
 
 // Simple connection check function
 export const checkSupabaseConnection = async (): Promise<boolean> => {
@@ -27,9 +114,9 @@ export const checkSupabaseConnection = async (): Promise<boolean> => {
 export const testAuthConnection = async (): Promise<{ success: boolean; error?: string }> => {
   try {
     // Test basic connection first
-    const { data, error } = await supabase.auth.getSession()
-    if (error) {
-      return { success: false, error: error.message }
+    const { data: session, error: authError } = await supabase.auth.getSession()
+    if (authError) {
+      return { success: false, error: authError.message }
     }
     return { success: true }
   } catch (err) {
