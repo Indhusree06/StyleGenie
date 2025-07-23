@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Sparkles, Check, ArrowRight, Shield, Zap, Users } from "lucide-react"
+import { Sparkles, Check, ArrowRight, Zap, Users } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useAuth } from "@/hooks/useAuth"
@@ -31,7 +31,7 @@ export default function PricingPage() {
         "Basic outfit recommendations",
         "Weather-based suggestions",
         "Up to 50 clothing items",
-        "Basic wardrobe analytics"
+        "Basic wardrobe analytics",
       ],
       cta: "Current Plan",
       color: "from-gray-500 to-gray-600",
@@ -51,16 +51,16 @@ export default function PricingPage() {
         "Age-appropriate recommendations",
         "Advanced AI styling engine",
         "Shared wardrobe access",
-        "Priority customer support"
+        "Priority customer support",
       ],
       cta: "Upgrade to Premium",
       color: "from-teal-500 to-cyan-500",
       popular: true,
-    }
+    },
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -75,7 +75,7 @@ export default function PricingPage() {
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-10 bg-gray-800/40 backdrop-blur-xl border-b border-gray-700/50">
+      <nav className="relative z-10 bg-black/95 backdrop-blur-xl border-b border-gray-700/50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3">
@@ -90,7 +90,10 @@ export default function PricingPage() {
               {user ? (
                 <>
                   <Link href="/wardrobe">
-                    <Button variant="ghost" className="text-gray-300 hover:text-white hover:bg-gray-800/50 transition-all">
+                    <Button
+                      variant="ghost"
+                      className="text-gray-300 hover:text-white hover:bg-gray-800/50 transition-all"
+                    >
                       My Wardrobe
                     </Button>
                   </Link>
@@ -98,7 +101,10 @@ export default function PricingPage() {
               ) : (
                 <>
                   <Link href="/auth">
-                    <Button variant="ghost" className="text-gray-300 hover:text-white hover:bg-gray-800/50 transition-all">
+                    <Button
+                      variant="ghost"
+                      className="text-gray-300 hover:text-white hover:bg-gray-800/50 transition-all"
+                    >
                       Sign In
                     </Button>
                   </Link>
@@ -130,9 +136,10 @@ export default function PricingPage() {
               </span>
             </h1>
             <p className="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
-              Choose the perfect plan for your styling needs. All plans include our core AI-powered outfit recommendations.
+              Choose the perfect plan for your styling needs. All plans include our core AI-powered outfit
+              recommendations.
             </p>
-            
+
             {/* Billing Toggle */}
             <div className="flex items-center justify-center mb-12">
               <div className="bg-gray-800/50 backdrop-blur-md rounded-full p-1 inline-flex">
@@ -177,7 +184,9 @@ export default function PricingPage() {
                 </div>
               )}
               <CardHeader>
-                <div className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-r ${plan.color} flex items-center justify-center`}>
+                <div
+                  className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-r ${plan.color} flex items-center justify-center`}
+                >
                   {plan.name === "Free Plan" && <Users className="w-6 h-6 text-white" />}
                   {plan.name === "Premium Family" && <Zap className="w-6 h-6 text-white" />}
                 </div>
@@ -188,13 +197,17 @@ export default function PricingPage() {
                 <div className="mb-6">
                   <span className="text-4xl font-bold text-white">${plan.price[billingCycle]}</span>
                   {plan.price[billingCycle] > 0 && (
-                    <span className="text-gray-400 ml-2">/ {billingCycle === "monthly" ? "month" : "month, billed yearly"}</span>
+                    <span className="text-gray-400 ml-2">
+                      / {billingCycle === "monthly" ? "month" : "month, billed yearly"}
+                    </span>
                   )}
                 </div>
                 <ul className="space-y-3">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <div className={`w-5 h-5 mt-0.5 rounded-full bg-gradient-to-r ${plan.color} flex-shrink-0 flex items-center justify-center`}>
+                      <div
+                        className={`w-5 h-5 mt-0.5 rounded-full bg-gradient-to-r ${plan.color} flex-shrink-0 flex items-center justify-center`}
+                      >
                         <Check className="w-3 h-3 text-white" />
                       </div>
                       <span className="text-gray-300 text-sm">{feature}</span>
@@ -203,7 +216,10 @@ export default function PricingPage() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Link href={user ? (plan.name === "Premium Family" ? "/upgrade" : "/wardrobe") : "/auth"} className="w-full">
+                <Link
+                  href={user ? (plan.name === "Premium Family" ? "/upgrade" : "/wardrobe") : "/auth"}
+                  className="w-full"
+                >
                   <Button
                     className={`w-full bg-gradient-to-r ${plan.color} hover:opacity-90 text-white shadow-lg group`}
                   >
@@ -221,29 +237,34 @@ export default function PricingPage() {
           <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-12">
             Frequently Asked Questions
           </h2>
-          
+
           <div className="space-y-6">
             {[
               {
                 question: "Can I switch between plans?",
-                answer: "Yes, you can upgrade or downgrade your plan at any time. When upgrading, you'll get immediate access to premium features. When downgrading, you'll retain premium features until the end of your current billing period."
+                answer:
+                  "Yes, you can upgrade or downgrade your plan at any time. When upgrading, you'll get immediate access to premium features. When downgrading, you'll retain premium features until the end of your current billing period.",
               },
               {
                 question: "How many family wardrobes can I create with the Premium plan?",
-                answer: "The Premium plan allows you to create up to 5 additional wardrobes for family members or different purposes. Each wardrobe gets its own personalized AI recommendations."
+                answer:
+                  "The Premium plan allows you to create up to 5 additional wardrobes for family members or different purposes. Each wardrobe gets its own personalized AI recommendations.",
               },
               {
                 question: "Is my data secure?",
-                answer: "Yes, we take data security very seriously. All your wardrobe data is encrypted and stored securely. We never share your personal information with third parties without your explicit consent."
+                answer:
+                  "Yes, we take data security very seriously. All your wardrobe data is encrypted and stored securely. We never share your personal information with third parties without your explicit consent.",
               },
               {
                 question: "Can I cancel my subscription anytime?",
-                answer: "Absolutely. You can cancel your subscription at any time from your account settings. There are no cancellation fees or hidden charges."
+                answer:
+                  "Absolutely. You can cancel your subscription at any time from your account settings. There are no cancellation fees or hidden charges.",
               },
               {
                 question: "Do you offer refunds?",
-                answer: "We offer a 14-day money-back guarantee for all paid plans. If you're not satisfied with our service, you can request a full refund within 14 days of your purchase."
-              }
+                answer:
+                  "We offer a 14-day money-back guarantee for all paid plans. If you're not satisfied with our service, you can request a full refund within 14 days of your purchase.",
+              },
             ].map((faq, index) => (
               <div key={index} className="bg-gray-800/30 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
                 <h3 className="text-xl font-semibold text-white mb-3">{faq.question}</h3>
@@ -273,9 +294,9 @@ export default function PricingPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Footer */}
-      <footer className="relative z-10 bg-gray-900/80 backdrop-blur-xl border-t border-gray-800/50 py-8 mt-20">
+      <footer className="relative z-10 bg-black/95 backdrop-blur-xl border-t border-gray-800/50 py-8 mt-20">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">

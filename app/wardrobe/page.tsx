@@ -1,13 +1,15 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect, Suspense, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft, Search, Sparkles, Plus, BarChart3, Heart, Trash2, Info, Filter, Grid3X3, List, Edit, Upload, X } from "lucide-react"
+import { ArrowLeft, Search, Sparkles, Plus, BarChart3, Heart, Trash2, Filter, Grid3X3, List, Edit } from "lucide-react"
 import Link from "next/link"
-import { type WardrobeItem } from "@/lib/supabase"
+import type { WardrobeItem } from "@/lib/supabase"
 import { wardrobeService, wardrobeProfileService } from "@/lib/supabase"
 import { useAuth } from "@/hooks/useAuth"
 import { useSearchParams, useRouter } from "next/navigation"
@@ -43,7 +45,7 @@ function WardrobeContent() {
   })
   const [sortBy, setSortBy] = useState("newest")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  
+
   // Edit modal state
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<WardrobeItem | null>(null)
@@ -80,7 +82,7 @@ function WardrobeContent() {
   // Calculate stats using useMemo to prevent recalculation
   const stats = useMemo(() => {
     return wardrobeItems.reduce((acc: Record<string, number>, item) => {
-      const categoryName = item.category?.name || item.category || 'uncategorized'
+      const categoryName = item.category?.name || item.category || "uncategorized"
       acc[categoryName] = (acc[categoryName] || 0) + 1
       return acc
     }, {})
@@ -99,14 +101,14 @@ function WardrobeContent() {
 
   const loadProfileData = async () => {
     if (!user || !profileParam) return
-    
+
     try {
       // Determine which user's profiles to load
       const targetUserId = userIdParam || user.id
-      
+
       // Load profile information from database
       const profiles = await wardrobeProfileService.getWardrobeProfiles(targetUserId)
-      const profile = profiles?.find(p => p.id === profileParam)
+      const profile = profiles?.find((p) => p.id === profileParam)
       setCurrentProfile(profile)
       console.log("Loaded profile data:", profile)
     } catch (error) {
@@ -123,57 +125,46 @@ function WardrobeContent() {
     try {
       setLoading(true)
       console.log("Loading wardrobe from Supabase database...")
-      
+
       // Determine which user's wardrobe to load
       let targetUserId = user.id // Default to authenticated user
       let wardrobeOwnerInfo = `main wardrobe`
       let profileIdToFilter: string | undefined = undefined
-      
+
       // Check if we're viewing a different user's wardrobe
       if (userIdParam) {
         targetUserId = userIdParam
         wardrobeOwnerInfo = `user ${userIdParam}'s wardrobe`
         console.log("Loading different user's wardrobe:", userIdParam)
       } else if (profileParam) {
-        // If viewing a specific profile, we need to determine the correct approach
+        // If viewing a specific profile, load their specific items
         console.log("Loading profile-specific wardrobe for profile:", profileParam)
         const profiles = await wardrobeProfileService.getWardrobeProfiles(user.id)
-        const profile = profiles?.find(p => p.id === profileParam)
-        
+        const profile = profiles?.find((p) => p.id === profileParam)
+
         if (profile) {
-          console.log("Found profile:", profile.name, "- loading their wardrobe items")
+          console.log("Found profile:", profile.name, "- loading their specific wardrobe items")
           wardrobeOwnerInfo = `profile ${profile.name}'s wardrobe`
-          
-          // For wardrobe profiles, we filter by wardrobe_profile_id
-          // The items still belong to the authenticated user but are associated with the profile
           targetUserId = user.id
           profileIdToFilter = profileParam
         } else {
           console.warn("Profile not found:", profileParam)
         }
       }
-      
+
       console.log("Target user ID:", targetUserId)
-      console.log("Profile ID:", profileParam || "none")
-      
+      console.log("Profile ID filter:", profileIdToFilter || "none (main wardrobe)")
+
       // Run debug connection test first
       await wardrobeService.debugConnection(targetUserId)
-      
+
       try {
         // Load items for specific user/profile or main wardrobe
         console.log("Attempting to load wardrobe items with:", { userId: targetUserId, profileId: profileIdToFilter })
         const items = await wardrobeService.getWardrobeItems(targetUserId, profileIdToFilter)
-        
-        // If viewing a profile but no profile-specific items exist, show all user items as fallback
-        if (profileIdToFilter && (!items || items.length === 0)) {
-          console.log(`No items found for profile ${profileIdToFilter}, showing all user items as fallback`)
-          const fallbackItems = await wardrobeService.getWardrobeItems(targetUserId, undefined)
-          setWardrobeItems(fallbackItems || [])
-          console.log(`Loaded ${fallbackItems?.length || 0} fallback items from database for ${wardrobeOwnerInfo}`)
-        } else {
-          setWardrobeItems(items || [])
-          console.log(`Loaded ${items?.length || 0} items from database for ${wardrobeOwnerInfo}`)
-        }
+
+        setWardrobeItems(items || [])
+        console.log(`Loaded ${items?.length || 0} items from database for ${wardrobeOwnerInfo}`)
       } catch (loadError) {
         console.error("Error loading wardrobe items:", loadError)
         setWardrobeItems([])
@@ -201,7 +192,7 @@ function WardrobeContent() {
         item.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.tags?.some((tagAssoc: any) => tagAssoc.tag.name.toLowerCase().includes(searchTerm.toLowerCase()))
 
-      const itemCategoryName = item.category?.name || item.category || 'uncategorized'
+      const itemCategoryName = item.category?.name || item.category || "uncategorized"
       const matchesCategory = filters.category === "all" || itemCategoryName === filters.category
 
       const matchesSeason =
@@ -302,7 +293,7 @@ function WardrobeContent() {
       newImage: null,
     })
     setImagePreview(item.image_url || null)
-    
+
     // Load available tags
     try {
       const tags = await wardrobeService.getTags()
@@ -310,7 +301,7 @@ function WardrobeContent() {
     } catch (error) {
       console.error("Error loading tags:", error)
     }
-    
+
     setEditModalOpen(true)
   }
 
@@ -361,9 +352,9 @@ function WardrobeContent() {
         brand: editFormData.brand,
         color: editFormData.color,
         size: editFormData.size,
-        price: editFormData.price ? parseFloat(editFormData.price) : undefined,
+        price: editFormData.price ? Number.parseFloat(editFormData.price) : undefined,
         condition: editFormData.condition,
-        wear_count: parseInt(editFormData.wearCount) || 0,
+        wear_count: Number.parseInt(editFormData.wearCount) || 0,
         last_worn: editFormData.lastWorn || undefined,
       }
 
@@ -375,7 +366,7 @@ function WardrobeContent() {
           const imageResult = await wardrobeService.uploadImage(editFormData.newImage, user.id, editingItem.id)
           await wardrobeService.updateWardrobeItem(editingItem.id, {
             image_url: imageResult.url,
-            image_path: imageResult.path
+            image_path: imageResult.path,
           })
         } catch (imageError) {
           console.error("Error uploading image:", imageError)
@@ -407,9 +398,9 @@ function WardrobeContent() {
   // Show loading while initializing
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-400">Loading your wardrobe...</p>
         </div>
       </div>
@@ -419,19 +410,15 @@ function WardrobeContent() {
   // Show login prompt if not authenticated
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-20 h-20 bg-teal-800 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
             <Sparkles className="w-10 h-10 text-gray-400" />
           </div>
           <h3 className="text-xl font-semibold text-gray-100 mb-2">Please log in</h3>
-          <p className="text-gray-500 mb-6">
-            You need to be logged in to view your wardrobe
-          </p>
+          <p className="text-gray-500 mb-6">You need to be logged in to view your wardrobe</p>
           <Link href="/">
-            <Button className="bg-teal-500 hover:bg-teal-600 text-white">
-              Go to Home
-            </Button>
+            <Button className="bg-white text-black hover:bg-gray-200">Go to Home</Button>
           </Link>
         </div>
       </div>
@@ -439,9 +426,9 @@ function WardrobeContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       {/* Navigation */}
-      <nav className="bg-gray-800/95 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-50">
+      <nav className="bg-gray-800/50 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -461,8 +448,8 @@ function WardrobeContent() {
                 </Link>
               )}
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-black" />
                 </div>
                 <h1 className="text-2xl font-bold text-white">My Wardrobe</h1>
               </div>
@@ -470,13 +457,11 @@ function WardrobeContent() {
             <div className="flex items-center gap-4">
               {user && (
                 <>
-                  <div className="text-sm text-gray-400">
-                    Welcome, {user.email}
-                  </div>
+                  <div className="text-sm text-gray-400">Welcome, {user.email}</div>
                   <Button
                     onClick={async () => {
                       await signOut()
-                      router.push('/landing')
+                      router.push("/landing")
                     }}
                     variant="outline"
                     size="sm"
@@ -487,7 +472,7 @@ function WardrobeContent() {
                 </>
               )}
               <Link href={profileParam ? `/add-clothes?profile=${profileParam}` : "/add-clothes"}>
-                <Button className="bg-teal-500 hover:bg-teal-600 text-white shadow-lg">
+                <Button className="bg-white hover:bg-gray-200 text-black shadow-lg">
                   <Plus className="w-4 h-4 mr-2" />
                   Add New Item
                 </Button>
@@ -498,18 +483,16 @@ function WardrobeContent() {
       </nav>
 
       <div className="container mx-auto px-6 py-8">
-
-
         {/* Profile Header */}
         {currentProfile && (
           <div className="mb-8">
-            <Card className="border-gray-700 bg-gray-800">
+            <Card className="border-gray-700 bg-gray-800/80 backdrop-blur-xl">
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
                     {currentProfile.profile_picture_url ? (
                       <img
-                        src={currentProfile.profile_picture_url}
+                        src={currentProfile.profile_picture_url || "/placeholder.svg"}
                         alt={currentProfile.name}
                         className="w-full h-full object-cover rounded-full"
                       />
@@ -521,12 +504,8 @@ function WardrobeContent() {
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-white">{currentProfile.name}'s Wardrobe</h2>
-                    {currentProfile.relation && (
-                      <p className="text-gray-400 capitalize">{currentProfile.relation}</p>
-                    )}
-                    {currentProfile.age && (
-                      <p className="text-gray-400">{currentProfile.age} years old</p>
-                    )}
+                    {currentProfile.relation && <p className="text-gray-400 capitalize">{currentProfile.relation}</p>}
+                    {currentProfile.age && <p className="text-gray-400">{currentProfile.age} years old</p>}
                   </div>
                 </div>
               </CardContent>
@@ -544,21 +523,20 @@ function WardrobeContent() {
               {currentProfile ? `${currentProfile.name}'s wardrobe is empty` : "Your wardrobe is empty"}
             </h3>
             <p className="text-gray-500 mb-6">
-              {currentProfile 
+              {currentProfile
                 ? `This is ${currentProfile.name}'s personal wardrobe. Items added here will be separate from your main wardrobe.`
-                : "Start adding clothes to your wardrobe to see them here."
-              }
+                : "Start adding clothes to your wardrobe to see them here."}
             </p>
             <div className="flex gap-4 justify-center">
               <Link href={profileParam ? `/add-clothes?profile=${profileParam}` : "/add-clothes"}>
-                <Button className="bg-teal-500 hover:bg-teal-600 text-white">
+                <Button className="bg-white hover:bg-gray-200 text-black">
                   <Plus className="w-4 h-4 mr-2" />
                   Add New Item
                 </Button>
               </Link>
               {currentProfile && (
                 <Link href="/wardrobe">
-                  <Button variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+                  <Button variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700 bg-transparent">
                     View Main Wardrobe
                   </Button>
                 </Link>
@@ -578,10 +556,10 @@ function WardrobeContent() {
               {Object.entries(stats).map(([category, count]) => (
                 <Card
                   key={category}
-                  className="border-0 shadow-lg bg-gray-800 border-gray-700 hover:shadow-xl transition-shadow"
+                  className="border-0 shadow-lg bg-gray-800/80 backdrop-blur-xl border-gray-700 hover:shadow-xl transition-shadow"
                 >
                   <CardContent className="p-6 text-center">
-                    <div className="text-3xl font-bold bg-gradient-to-r from-teal-500 to-teal-600 bg-clip-text text-transparent">
+                    <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                       {count}
                     </div>
                     <div className="text-sm text-gray-400 capitalize font-medium">{category}</div>
@@ -602,16 +580,16 @@ function WardrobeContent() {
                 placeholder="Search your wardrobe..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-gray-700 focus:border-teal-400 focus:ring-teal-400 bg-gray-800 text-white"
+                className="pl-10 border-gray-700 focus:border-white focus:ring-white bg-gray-800 text-white"
               />
             </div>
 
             {/* Advanced Filters */}
-            <Card className="border-gray-700 bg-gray-800 mb-6">
+            <Card className="border-gray-700 bg-gray-800/80 backdrop-blur-xl mb-6">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                    <Filter className="w-5 h-5 text-teal-400" />
+                    <Filter className="w-5 h-5 text-white" />
                     Advanced Filters
                   </h3>
                   <div className="flex items-center gap-4">
@@ -621,7 +599,7 @@ function WardrobeContent() {
                         variant={viewMode === "grid" ? "default" : "outline"}
                         size="sm"
                         onClick={() => setViewMode("grid")}
-                        className={viewMode === "grid" ? "bg-teal-500 text-white" : "border-gray-600 text-gray-400"}
+                        className={viewMode === "grid" ? "bg-white text-black" : "border-gray-600 text-gray-400"}
                       >
                         <Grid3X3 className="w-4 h-4" />
                       </Button>
@@ -629,7 +607,7 @@ function WardrobeContent() {
                         variant={viewMode === "list" ? "default" : "outline"}
                         size="sm"
                         onClick={() => setViewMode("list")}
-                        className={viewMode === "list" ? "bg-teal-500 text-white" : "border-gray-600 text-gray-400"}
+                        className={viewMode === "list" ? "bg-white text-black" : "border-gray-600 text-gray-400"}
                       >
                         <List className="w-4 h-4" />
                       </Button>
@@ -773,7 +751,7 @@ function WardrobeContent() {
                           type="checkbox"
                           checked={filters.favorites}
                           onChange={(e) => setFilters({ ...filters, favorites: e.target.checked })}
-                          className="rounded border-gray-500 text-teal-500 focus:ring-teal-400 bg-gray-700"
+                          className="rounded border-gray-500 text-white focus:ring-white bg-gray-700"
                         />
                         <span className="text-sm text-gray-300">Favorites Only</span>
                       </label>
@@ -782,7 +760,7 @@ function WardrobeContent() {
                           type="checkbox"
                           checked={filters.neverWorn}
                           onChange={(e) => setFilters({ ...filters, neverWorn: e.target.checked })}
-                          className="rounded border-gray-500 text-teal-500 focus:ring-teal-400 bg-gray-700"
+                          className="rounded border-gray-500 text-white focus:ring-white bg-gray-700"
                         />
                         <span className="text-sm text-gray-300">Never Worn</span>
                       </label>
@@ -798,7 +776,7 @@ function WardrobeContent() {
                       {Object.entries(filters).map(([key, value]) => {
                         if (value === "all" || value === false) return null
                         return (
-                          <Badge key={key} variant="secondary" className="bg-teal-800 text-teal-200">
+                          <Badge key={key} variant="secondary" className="bg-blue-800 text-blue-200">
                             {key}: {value === true ? "yes" : value}
                             <button
                               onClick={() =>
@@ -849,7 +827,7 @@ function WardrobeContent() {
               <div className="text-sm text-gray-400">
                 Showing {filteredItems.length} of {wardrobeItems.length} items
                 {filteredItems.length !== wardrobeItems.length && (
-                  <span className="text-teal-400 ml-1">
+                  <span className="text-blue-400 ml-1">
                     ({wardrobeItems.length - filteredItems.length} filtered out)
                   </span>
                 )}
@@ -871,22 +849,24 @@ function WardrobeContent() {
             {filteredItems.map((item) => (
               <Card
                 key={item.id}
-                className="overflow-hidden hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-gray-800 border-gray-700 group"
+                className="overflow-hidden hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-gray-800/80 backdrop-blur-xl border-gray-700 group"
               >
                 <div className="aspect-[3/4] relative overflow-hidden">
                   {item.image_url ? (
                     <img
-                      src={item.image_url}
+                      src={item.image_url || "/placeholder.svg"}
                       alt={item.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.nextElementSibling?.classList.remove('hidden');
+                        const target = e.target as HTMLImageElement
+                        target.style.display = "none"
+                        target.nextElementSibling?.classList.remove("hidden")
                       }}
                     />
                   ) : null}
-                  <div className={`w-full h-full flex items-center justify-center bg-gray-700 ${item.image_url ? 'hidden' : ''}`}>
+                  <div
+                    className={`w-full h-full flex items-center justify-center bg-gray-700 ${item.image_url ? "hidden" : ""}`}
+                  >
                     <div className="text-center">
                       <Sparkles className="w-12 h-12 text-gray-500 mx-auto mb-2" />
                       <p className="text-xs text-gray-500">No Image</p>
@@ -939,7 +919,7 @@ function WardrobeContent() {
                       <Badge
                         key={tagAssoc.tag?.id || tagAssoc.id}
                         variant="secondary"
-                        className="text-xs bg-teal-800 text-gray-300 border-0"
+                        className="text-xs bg-blue-800 text-gray-300 border-0"
                         style={{
                           backgroundColor: `${tagAssoc.tag?.color || tagAssoc.color}20`,
                           color: tagAssoc.tag?.color || tagAssoc.color,
@@ -963,7 +943,7 @@ function WardrobeContent() {
         {/* Empty State */}
         {wardrobeItems.length === 0 && (
           <div className="text-center py-20">
-            <div className="w-20 h-20 bg-teal-800 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
               <Sparkles className="w-10 h-10 text-gray-400" />
             </div>
             <h3 className="text-xl font-semibold text-gray-100 mb-2">Your wardrobe is empty</h3>
@@ -971,7 +951,7 @@ function WardrobeContent() {
               Start building your digital wardrobe by adding your first item to get personalized outfit recommendations
             </p>
             <Link href="/add-clothes">
-              <Button className="bg-teal-500 hover:bg-teal-600 text-white">
+              <Button className="bg-white hover:bg-gray-200 text-black">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Your First Item
               </Button>
@@ -982,7 +962,7 @@ function WardrobeContent() {
         {/* No Search Results */}
         {wardrobeItems.length > 0 && filteredItems.length === 0 && (
           <div className="text-center py-20">
-            <div className="w-20 h-20 bg-teal-800 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
               <Search className="w-10 h-10 text-gray-400" />
             </div>
             <h3 className="text-xl font-semibold text-gray-100 mb-2">No items found</h3>
@@ -1030,9 +1010,9 @@ export default function WardrobePage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
           <div className="text-center">
-            <div className="w-8 h-8 border-2 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-gray-400">Loading wardrobe...</p>
           </div>
         </div>

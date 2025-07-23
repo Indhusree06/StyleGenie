@@ -50,7 +50,7 @@ export function AuthForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
@@ -62,7 +62,7 @@ export function AuthForm() {
       <div className="absolute inset-0 bg-black/40" />
 
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
-        <Card className="w-full max-w-md bg-gray-900/80 backdrop-blur-xl border-gray-700/50 shadow-2xl">
+        <Card className="w-full max-w-md bg-gray-800/80 backdrop-blur-xl border-gray-700/50 shadow-2xl">
           <CardContent className="p-8">
             {/* Back Button */}
             <div className="mb-6">
@@ -88,7 +88,7 @@ export function AuthForm() {
             </div>
 
             {/* Tab Buttons */}
-            <div className="flex mb-6 bg-gray-800 rounded-lg p-1">
+            <div className="flex mb-6 bg-gray-700 rounded-lg p-1">
               <button
                 onClick={() => setIsSignUp(false)}
                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
@@ -120,7 +120,7 @@ export function AuthForm() {
                     placeholder="Enter your full name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="mt-1 h-12 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-white focus:ring-white"
+                    className="mt-1 h-12 bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-white focus:ring-white"
                     required={isSignUp}
                   />
                 </div>
@@ -136,7 +136,7 @@ export function AuthForm() {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 h-12 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-white focus:ring-white"
+                  className="mt-1 h-12 bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-white focus:ring-white"
                   required
                 />
               </div>
@@ -151,7 +151,7 @@ export function AuthForm() {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 h-12 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-white focus:ring-white"
+                  className="mt-1 h-12 bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-white focus:ring-white"
                   required
                 />
               </div>

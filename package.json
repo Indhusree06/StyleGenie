@@ -1,15 +1,18 @@
 {
-  "name": "my-v0-project",
+  "name": "stylegenie-ai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "next build",
+    "db:check": "node scripts/check-and-create-table.js",
+    "db:seed": "node scripts/seed-sample-data.js",
+    "db:setup": "node scripts/setup-database.js",
     "dev": "next dev",
     "lint": "next lint",
+    "migrate:wardrobe-profiles": "node scripts/run-wardrobe-profile-migration.js",
     "start": "next start"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^1.2.12",
     "@ai-sdk/openai": "latest",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "latest",
@@ -31,6 +34,7 @@
     "@radix-ui/react-scroll-area": "latest",
     "@radix-ui/react-select": "latest",
     "@radix-ui/react-separator": "latest",
+    "@radix-ui/react-sheet": "^1.1.0",
     "@radix-ui/react-slider": "latest",
     "@radix-ui/react-slot": "latest",
     "@radix-ui/react-switch": "latest",
@@ -40,13 +44,16 @@
     "@radix-ui/react-toggle-group": "latest",
     "@radix-ui/react-tooltip": "latest",
     "@supabase/supabase-js": "latest",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "ai": "latest",
-    "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "latest",
-    "date-fns": "4.1.0",
+    "date-fns": "^4.1.0",
     "embla-carousel-react": "latest",
+    "framer-motion": "^11.11.17",
     "input-otp": "latest",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
@@ -62,15 +69,17 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "latest",
-    "zod": "^3.24.1",
-    "zod-to-json-schema": "^3.24.6"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/eslint": "^8",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.3",
     "postcss": "^8.5",
-    "tailwindcss": "^3.4.17",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
 }

@@ -12,7 +12,7 @@ export default function AuthPage() {
   useEffect(() => {
     // If user is already authenticated, redirect to home page
     if (user && !loading) {
-      router.push("/home");
+      router.push("/home")
     }
   }, [user, loading, router])
 

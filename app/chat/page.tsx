@@ -356,7 +356,7 @@ export default function ChatPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
         <div className="text-white">Loading...</div>
       </div>
     )
@@ -367,9 +367,9 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       {/* Navigation */}
-      <nav className="border-b border-gray-800 bg-black/50 backdrop-blur-sm">
+      <nav className="border-b border-gray-700 bg-gray-800/40 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -421,7 +421,7 @@ export default function ChatPage() {
       </nav>
 
       {/* Weather Section */}
-      <div className="border-b border-gray-800 bg-gray-900/50">
+      <div className="border-b border-gray-700 bg-gray-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -432,7 +432,7 @@ export default function ChatPage() {
                     variant="outline"
                     role="combobox"
                     aria-expanded={cityDropdownOpen}
-                    className="w-[200px] justify-between bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
+                    className="w-[200px] justify-between bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
                   >
                     <div className="flex items-center space-x-2">
                       <MapPin className="w-4 h-4" />
@@ -441,8 +441,8 @@ export default function ChatPage() {
                     <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[300px] p-0 bg-gray-800 border-gray-700">
-                  <Command className="bg-gray-800">
+                <PopoverContent className="w-[300px] p-0 bg-gray-700 border-gray-600">
+                  <Command className="bg-gray-700">
                     <CommandInput placeholder="Search cities..." className="text-white placeholder:text-gray-400" />
                     <CommandEmpty className="text-gray-400 p-4">No city found.</CommandEmpty>
                     <CommandGroup className="max-h-[300px] overflow-y-auto">
@@ -455,7 +455,7 @@ export default function ChatPage() {
                               setSelectedCity(city)
                               setCityDropdownOpen(false)
                             }}
-                            className="text-white hover:bg-gray-700 cursor-pointer"
+                            className="text-white hover:bg-gray-600 cursor-pointer"
                           >
                             <Check
                               className={`mr-2 h-4 w-4 ${
@@ -497,7 +497,7 @@ export default function ChatPage() {
       {/* Back to Home Button */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <Link href="/home">
-          <Button variant="outline" className="bg-gray-800 border-gray-700 text-white hover:bg-gray-700">
+          <Button variant="outline" className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Home
           </Button>
@@ -523,7 +523,7 @@ export default function ChatPage() {
             <div key={message.id} className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}>
               <div
                 className={`max-w-[80%] p-4 rounded-2xl ${
-                  message.isUser ? "bg-white text-black" : "bg-gray-800 text-white"
+                  message.isUser ? "bg-white text-black" : "bg-gray-700 text-white"
                 }`}
               >
                 <p className="text-sm">{message.text}</p>
@@ -535,7 +535,7 @@ export default function ChatPage() {
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-gray-800 text-white p-4 rounded-2xl">
+              <div className="bg-gray-700 text-white p-4 rounded-2xl">
                 <div className="flex space-x-1">
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                   <div
@@ -560,7 +560,7 @@ export default function ChatPage() {
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask me about outfit recommendations..."
-            className="flex-1 bg-gray-800 border-gray-700 text-white placeholder:text-gray-400 focus:border-white"
+            className="flex-1 bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-white"
             disabled={isLoading}
           />
           <Button
