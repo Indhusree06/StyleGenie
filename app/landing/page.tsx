@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { Sparkles, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
+import { Sparkles, ArrowRight, ChevronLeft, ChevronRight, Upload, Tag, Zap } from "lucide-react"
 import Link from "next/link"
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false)
-  const [activeSection, setActiveSection] = useState("features")
+  const [activeSection, setActiveSection] = useState("")
   const [currentSlide, setCurrentSlide] = useState(0)
   const [audienceType, setAudienceType] = useState("moms") // "moms" or "teens"
   const carouselRef = useRef<HTMLDivElement>(null)
@@ -70,7 +70,7 @@ export default function LandingPage() {
       alt: "Teen hands browsing through clothing on hangers in store",
     },
     {
-      src: "https://plus.unsplash.com/premium_photo-1663957982967-90208afa3bba?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c2Nob29sJTIwdGVlbnN8ZW58MHx8MHx8fDA%3D",
+      src: "https://images.unsplash.com/photo-1549057446-9f5c6ac91a04?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2Nob29sJTIwdGVlbnN8ZW58MHx8MHx8fDA%3D",
       alt: "Group of diverse teenagers with different personal styles",
     },
     {
@@ -78,7 +78,7 @@ export default function LandingPage() {
       alt: "School teens showcasing their individual fashion choices",
     },
     {
-      src: "https://images.unsplash.com/photo-1549057446-9f5c6ac91a04?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8dGVlbnN8ZW58MHx8MHx8fDA%3D",
+      src: "https://images.unsplash.com/photo-1549057446-9f5c6ac91a04?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2Nob29sJTIwdGVlbnN8ZW58MHx8MHx8fDA%3D",
       alt: "Teenagers exploring fashion and personal style choices",
     },
     {
@@ -109,9 +109,30 @@ export default function LandingPage() {
 
     window.addEventListener("keydown", handleKeyDown)
 
+    // Set active section based on scroll position
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 100 // offset for the navbar
+
+      // Get all sections
+      const sections = ["hero", "audience", "features", "how"]
+
+      // Find the current section
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sections[i])
+        if (section && scrollPosition >= section.offsetTop) {
+          setActiveSection(sections[i])
+          break
+        }
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    handleScroll() // Set initial active section
+
     return () => {
       clearInterval(interval)
       window.removeEventListener("keydown", handleKeyDown)
+      window.removeEventListener("scroll", handleScroll)
     }
   }, [])
 
@@ -127,7 +148,13 @@ export default function LandingPage() {
     setActiveSection(sectionId)
     const element = document.getElementById(sectionId)
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+      // Add offset to account for sticky navigation
+      const navHeight = 80 // Approximate height of navigation
+      const elementPosition = element.offsetTop - navHeight
+      window.scrollTo({
+        top: elementPosition,
+        behavior: "smooth",
+      })
     }
   }
 
@@ -157,45 +184,48 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-gray-100">
+      <nav className="sticky top-0 z-50 bg-black/95 backdrop-blur-sm border-b border-gray-800">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-black" />
               </div>
-              <span className="text-2xl font-bold text-blue-500">Style Genie</span>
+              <span className="text-2xl font-bold text-white">Style Genie</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <button
                 onClick={() => scrollToSection("audience")}
-                className={`text-sm font-medium ${activeSection === "audience" ? "text-blue-500" : "text-gray-600 hover:text-blue-500"}`}
+                className={`text-sm font-medium transition-colors ${activeSection === "audience" ? "text-white" : "text-gray-400 hover:text-white"}`}
               >
                 Our audience
               </button>
               <button
                 onClick={() => scrollToSection("features")}
-                className={`text-sm font-medium ${activeSection === "features" ? "text-blue-500" : "text-gray-600 hover:text-blue-500"}`}
+                className={`text-sm font-medium transition-colors ${activeSection === "features" ? "text-white" : "text-gray-400 hover:text-white"}`}
               >
                 Features
               </button>
               <button
                 onClick={() => scrollToSection("how")}
-                className={`text-sm font-medium ${activeSection === "how" ? "text-blue-500" : "text-gray-600 hover:text-blue-500"}`}
+                className={`text-sm font-medium transition-colors ${activeSection === "how" ? "text-white" : "text-gray-400 hover:text-white"}`}
               >
                 How it works
               </button>
             </div>
             <div className="flex items-center space-x-4">
               <Link href="/auth">
-                <Button variant="outline" className="border-blue-500 text-blue-500 hover:bg-blue-50 bg-transparent">
+                <Button
+                  variant="outline"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white bg-transparent"
+                >
                   Sign In
                 </Button>
               </Link>
               <Link href="/auth">
-                <Button className="bg-blue-500 hover:bg-blue-600 text-white">Get Started</Button>
+                <Button className="bg-white text-black hover:bg-gray-200">Get Started</Button>
               </Link>
             </div>
           </div>
@@ -203,82 +233,26 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-10 md:mb-0">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-                Your AI-Powered <br />
-                <span className="text-blue-500">Wardrobe Assistant</span>
-              </h1>
-              <p className="text-lg text-gray-600 mb-8 max-w-lg">
-                Transform your wardrobe with intelligent outfit recommendations based on weather, occasion, and your
-                personal style.
+      <section id="hero" className="py-24 bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gray-800 rounded-full opacity-20 blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gray-700 rounded-full opacity-10 blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="flex flex-col items-center justify-center gap-12">
+            <div className="text-center">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">Style Genie</h1>
+              <p className="text-lg md:text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
+                Your AI-powered Outfit Selector with intelligent outfit recommendations based on weather, occasion, and
+                your personal style
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="mt-2">
                 <Link href="/auth">
-                  <Button className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 text-lg font-medium">
+                  <Button className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-lg font-medium">
                     Get Started Free
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 </Link>
-                <Link href="#how-it-works">
-                  <Button
-                    variant="outline"
-                    className="border-gray-300 text-gray-700 hover:bg-gray-100 px-8 py-3 text-lg bg-transparent"
-                  >
-                    Learn More
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <div className="md:w-1/2">
-              <div className="relative">
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-                  <div className="p-1">
-                    <div className="bg-gray-50 rounded-xl overflow-hidden">
-                      <div className="flex justify-between items-center p-4 border-b border-gray-200">
-                        <div className="flex space-x-2">
-                          <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                          <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                          <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                        </div>
-                        <div className="px-4 py-1 rounded-full bg-gray-100 text-xs text-gray-500">style-genie.app</div>
-                      </div>
-                      <div className="p-6">
-                        <div className="flex justify-between items-center mb-6">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                              <Sparkles className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="text-lg font-semibold text-gray-800">Style Genie</span>
-                          </div>
-                        </div>
-
-                        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200 mb-6">
-                          <p className="text-gray-700 text-sm mb-4">Here's your outfit for today's business meeting:</p>
-                          <div className="grid grid-cols-3 gap-3">
-                            <div className="bg-gray-100 rounded-lg p-2 text-center">
-                              <div className="w-full h-16 bg-blue-100 rounded-md mb-2"></div>
-                              <span className="text-xs text-gray-600">Navy Blazer</span>
-                            </div>
-                            <div className="bg-gray-100 rounded-lg p-2 text-center">
-                              <div className="w-full h-16 bg-blue-100 rounded-md mb-2"></div>
-                              <span className="text-xs text-gray-600">White Shirt</span>
-                            </div>
-                            <div className="bg-gray-100 rounded-lg p-2 text-center">
-                              <div className="w-full h-16 bg-blue-100 rounded-md mb-2"></div>
-                              <span className="text-xs text-gray-600">Gray Slacks</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* Decorative elements */}
-                <div className="absolute -top-6 -right-6 w-24 h-24 bg-blue-100 rounded-full"></div>
-                <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-blue-100 rounded-full"></div>
               </div>
             </div>
           </div>
@@ -286,136 +260,131 @@ export default function LandingPage() {
       </section>
 
       {/* Our Audience Section */}
-      <section id="audience" className="relative">
-        {/* Content Section Above Carousel */}
-        <div className="py-20 bg-white">
-          <div className="container mx-auto px-6">
-            <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Made for Moms and Teens</h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-12">
-                Style Genie helps busy moms manage wardrobes for the whole family and empowers teens to develop their
-                own style
-              </p>
+      <section id="audience" className="py-20 bg-gray-900">
+        <div className="container mx-auto px-6">
+          <div className="text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Made for Moms and Teens</h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-12">
+              Style Genie helps busy moms manage wardrobes for the whole family and empowers teens to develop their own
+              style
+            </p>
 
-              {/* Audience Selection Buttons - Uniqlo Style */}
-              <div className="flex justify-center mb-12">
-                <div className="inline-flex bg-gray-100 rounded-lg p-1">
-                  <button
-                    onClick={() => handleAudienceChange("moms")}
-                    className={`px-6 py-3 rounded-md text-sm font-medium transition-all duration-200 ${
-                      audienceType === "moms" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"
-                    }`}
-                  >
-                    For Moms
-                  </button>
-                  <button
-                    onClick={() => handleAudienceChange("teens")}
-                    className={`px-6 py-3 rounded-md text-sm font-medium transition-all duration-200 ${
-                      audienceType === "teens"
-                        ? "bg-white text-gray-900 shadow-sm"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
-                  >
-                    For Teens
-                  </button>
-                </div>
+            {/* Audience Selection Buttons - Dark Style */}
+            <div className="flex justify-center mb-12">
+              <div className="inline-flex bg-gray-800 rounded-lg p-1">
+                <button
+                  onClick={() => handleAudienceChange("moms")}
+                  className={`px-6 py-3 rounded-md text-sm font-medium transition-all duration-200 ${
+                    audienceType === "moms" ? "bg-white text-black shadow-sm" : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  For Moms
+                </button>
+                <button
+                  onClick={() => handleAudienceChange("teens")}
+                  className={`px-6 py-3 rounded-md text-sm font-medium transition-all duration-200 ${
+                    audienceType === "teens" ? "bg-white text-black shadow-sm" : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  For Teens
+                </button>
               </div>
+            </div>
 
-              {/* Dynamic Content Based on Selection */}
-              <div className="transition-all duration-300 ease-in-out">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto mb-12">
-                  {audienceType === "moms" ? (
-                    <>
-                      <div className="text-left">
-                        <h3 className="text-2xl font-semibold text-gray-900 mb-4">For Busy Moms</h3>
-                        <ul className="space-y-3 text-gray-600">
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Simplify morning routines for the entire family
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Get outfit suggestions for school, activities, and special occasions
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Manage multiple wardrobes from one convenient app
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Save time and reduce daily decision fatigue
-                          </li>
-                        </ul>
-                      </div>
-                      <div className="text-left">
-                        <h3 className="text-2xl font-semibold text-gray-900 mb-4">Family Benefits</h3>
-                        <ul className="space-y-3 text-gray-600">
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Coordinate outfits for the whole family
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Weather-appropriate clothing suggestions
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Special occasion outfit planning
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Track what everyone wore and when
-                          </li>
-                        </ul>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="text-left">
-                        <h3 className="text-2xl font-semibold text-gray-900 mb-4">For Teens</h3>
-                        <ul className="space-y-3 text-gray-600">
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Discover and develop your personal style
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Get age-appropriate outfit recommendations
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Build confidence through better styling choices
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Learn to mix and match existing wardrobe pieces
-                          </li>
-                        </ul>
-                      </div>
-                      <div className="text-left">
-                        <h3 className="text-2xl font-semibold text-gray-900 mb-4">Style Development</h3>
-                        <ul className="space-y-3 text-gray-600">
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Explore different fashion trends safely
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Get inspiration from style influencers
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Budget-friendly outfit combinations
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-blue-500 mr-2">•</span>
-                            Share looks with friends for feedback
-                          </li>
-                        </ul>
-                      </div>
-                    </>
-                  )}
-                </div>
+            {/* Dynamic Content Based on Selection */}
+            <div className="transition-all duration-300 ease-in-out">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto mb-12">
+                {audienceType === "moms" ? (
+                  <>
+                    <div className="text-left">
+                      <h3 className="text-2xl font-semibold text-white mb-4">For Busy Moms</h3>
+                      <ul className="space-y-3 text-gray-400">
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Simplify morning routines for the entire family
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Get outfit suggestions for school, activities, and special occasions
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Manage multiple wardrobes from one convenient app
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Save time and reduce daily decision fatigue
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="text-left">
+                      <h3 className="text-2xl font-semibold text-white mb-4">Family Benefits</h3>
+                      <ul className="space-y-3 text-gray-400">
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Coordinate outfits for the whole family
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Weather-appropriate clothing suggestions
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Special occasion outfit planning
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Track what everyone wore and when
+                        </li>
+                      </ul>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-left">
+                      <h3 className="text-2xl font-semibold text-white mb-4">For Teens</h3>
+                      <ul className="space-y-3 text-gray-400">
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Discover and develop your personal style
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Get age-appropriate outfit recommendations
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Build confidence through better styling choices
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Learn to mix and match existing wardrobe pieces
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="text-left">
+                      <h3 className="text-2xl font-semibold text-white mb-4">Style Development</h3>
+                      <ul className="space-y-3 text-gray-400">
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Explore different fashion trends safely
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Get inspiration from style influencers
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Budget-friendly outfit combinations
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-white mr-2">•</span>
+                          Share looks with friends for feedback
+                        </li>
+                      </ul>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -431,8 +400,9 @@ export default function LandingPage() {
           >
             {currentImages.map((image, index) => (
               <div key={`${audienceType}-${index}`} className="min-w-full h-full flex-shrink-0 snap-center relative">
-                {/* Full Screen Background Image */}
+                {/* Full Screen Background Image with Dark Overlay */}
                 <img src={image.src || "/placeholder.svg"} alt={image.alt} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/40"></div>
               </div>
             ))}
           </div>
@@ -440,7 +410,7 @@ export default function LandingPage() {
           {/* Navigation Arrows */}
           <button
             onClick={prevSlide}
-            className="absolute top-1/2 left-6 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 shadow-lg z-20 transition-all"
+            className="absolute top-1/2 left-6 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 backdrop-blur-sm rounded-full p-3 shadow-lg z-20 transition-all"
             aria-label="Previous slide"
           >
             <ChevronLeft className="w-6 h-6 text-white" />
@@ -448,7 +418,7 @@ export default function LandingPage() {
 
           <button
             onClick={nextSlide}
-            className="absolute top-1/2 right-6 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 shadow-lg z-20 transition-all"
+            className="absolute top-1/2 right-6 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 backdrop-blur-sm rounded-full p-3 shadow-lg z-20 transition-all"
             aria-label="Next slide"
           >
             <ChevronRight className="w-6 h-6 text-white" />
@@ -470,12 +440,12 @@ export default function LandingPage() {
         </div>
 
         {/* Final CTA Section Below Carousel */}
-        <div className="py-20 bg-white">
+        <div className="py-20 bg-gray-900">
           <div className="container mx-auto px-6">
             <div className="text-center">
-              <div className="bg-blue-50 rounded-2xl p-8">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Perfect for the Whole Family</h3>
-                <p className="text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed">
+              <div className="bg-gray-800 rounded-2xl p-8 border border-gray-700">
+                <h3 className="text-2xl font-semibold text-white mb-4">Perfect for the Whole Family</h3>
+                <p className="text-gray-400 max-w-3xl mx-auto text-lg leading-relaxed">
                   Whether you're a busy mom juggling multiple schedules and wardrobes, or a teen exploring your unique
                   style, Style Genie brings families together through the shared experience of looking and feeling
                   great. Our AI understands that every family member has different needs, preferences, and occasions to
@@ -483,7 +453,7 @@ export default function LandingPage() {
                 </p>
                 <div className="mt-6">
                   <Link href="/auth">
-                    <Button className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 text-lg font-medium">
+                    <Button className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-lg font-medium">
                       Start Your Family's Style Journey
                       <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
@@ -496,135 +466,174 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20">
+      <section id="features" className="py-20 bg-black">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Smart Features for Your Wardrobe</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Style Genie combines AI technology with your personal style to create the perfect wardrobe experience
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Why families love Style Genie</h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              Real solutions for real wardrobe challenges that busy families face every day
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "AI-Powered Styling",
-                description:
-                  "Get personalized outfit recommendations based on your wardrobe, weather conditions, and personal style preferences.",
-                icon: "✨",
-              },
-              {
-                title: "Weather Integration",
-                description:
-                  "Real-time weather data ensures your outfit recommendations are always appropriate for current conditions.",
-                icon: "🌦️",
-              },
-              {
-                title: "Smart Wardrobe",
-                description:
-                  "Organize and manage your clothing collection with intelligent categorization, favorites, and wear tracking.",
-                icon: "👕",
-              },
-            ].map((feature, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-              >
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="bg-gray-900 rounded-xl p-8 shadow-sm border border-gray-800 hover:bg-gray-800 transition-colors">
+              <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                  />
+                </svg>
               </div>
-            ))}
+              <h3 className="text-xl font-semibold text-white mb-4">Never guess the weather again</h3>
+              <p className="text-gray-400 leading-relaxed">
+                No more sending kids to school in shorts when it's 45°F. Get outfit suggestions that actually match the
+                weather forecast, so everyone stays comfortable all day.
+              </p>
+            </div>
+
+            <div className="bg-gray-900 rounded-xl p-8 shadow-sm border border-gray-800 hover:bg-gray-800 transition-colors">
+              <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Cut morning chaos in half</h3>
+              <p className="text-gray-400 leading-relaxed">
+                Stop the daily "I have nothing to wear" meltdowns. Plan outfits the night before or get instant
+                suggestions when you're running late.
+              </p>
+            </div>
+
+            <div className="bg-gray-900 rounded-xl p-8 shadow-sm border border-gray-800 hover:bg-gray-800 transition-colors">
+              <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Rediscover clothes you forgot you had</h3>
+              <p className="text-gray-400 leading-relaxed">
+                That cute top buried in the back of the closet? Style Genie remembers it and suggests new ways to wear
+                it. Make the most of what you already own.
+              </p>
+            </div>
+          </div>
+
+          {/* Additional Features Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mt-12">
+            <div className="bg-gray-900 rounded-xl p-8 shadow-sm border border-gray-800 hover:bg-gray-800 transition-colors">
+              <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Perfect for the whole family</h3>
+              <p className="text-gray-400 leading-relaxed">
+                Manage everyone's wardrobe in one place. From toddler tantrums to teenage fashion crises, get
+                age-appropriate suggestions for every family member.
+              </p>
+            </div>
+
+            <div className="bg-gray-900 rounded-xl p-8 shadow-sm border border-gray-800 hover:bg-gray-800 transition-colors">
+              <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138-3.138"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Explore and Mix</h3>
+              <p className="text-gray-400 leading-relaxed">
+                Easily explore different fashion trends and mix and match pieces from your wardrobe to create unique
+                outfits.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section id="how-it-works" className="py-20 bg-blue-50">
+      {/* How It Works Section */}
+      <section id="how" className="py-20 bg-gray-900">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Getting started with Style Genie is easy and takes just minutes
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">How it works</h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              Getting started with Style Genie is simple and takes just a few minutes
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {[
-              {
-                step: "1",
-                title: "Add Your Clothes",
-                description: "Take photos or manually add items to build your digital wardrobe.",
-              },
-              {
-                step: "2",
-                title: "Set Your Preferences",
-                description: "Tell us about your style, favorite colors, and occasions you dress for.",
-              },
-              {
-                step: "3",
-                title: "Get Recommendations",
-                description: "Receive personalized outfit suggestions based on weather and events.",
-              },
-            ].map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">
-                  {step.step}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
+                <Upload className="w-8 h-8 text-black" />
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+              <h3 className="text-xl font-semibold text-white mb-3">1. Upload Your Photos</h3>
+              <p className="text-gray-400 leading-relaxed">
+                Take photos of your clothes and upload them to create your digital wardrobe. Our app makes it easy to
+                organize everything by category, color, and season.
+              </p>
+            </div>
 
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="bg-blue-500 rounded-2xl p-12 text-center">
-            <h2 className="text-3xl font-bold text-white mb-6">Ready to Transform Your Style?</h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Join thousands of users who have revolutionized their wardrobe with AI-powered styling.
-            </p>
-            <Link href="/auth">
-              <Button className="bg-white text-blue-500 hover:bg-blue-50 px-8 py-3 text-lg font-medium">
-                Get Started Free
-              </Button>
-            </Link>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Tag className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">2. Add Your Tags</h3>
+              <p className="text-gray-400 leading-relaxed">
+                Tag your items with details like color, style, occasion, and season. This helps our AI understand your
+                preferences and suggest the perfect combinations.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Zap className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">3. Get Smart Suggestions</h3>
+              <p className="text-gray-400 leading-relaxed">
+                Receive personalized outfit recommendations based on weather, occasion, and your style preferences.
+                Getting dressed has never been easier!
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-50 py-12 border-t border-gray-100">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-3 mb-6 md:mb-0">
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-xl font-bold text-blue-500">Style Genie</span>
+      <footer className="relative">
+        {/* Full-width wardrobe image */}
+        <div className="w-full h-64 md:h-80 bg-gradient-to-r from-black to-gray-900 relative overflow-hidden">
+          <div className="absolute inset-0 bg-black/60"></div>
+          <img
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/faith-lee-rg5WfuAihU8-unsplash.jpg-7BrehqsohboRsoCRh8XjJTQ8Jk7DzO.jpeg"
+            alt="Black and white wardrobe with hanging clothes showing sophisticated style aesthetic"
+            className="w-full h-full object-cover opacity-70"
+          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center text-white">
+              <h3 className="text-2xl md:text-3xl font-bold mb-2">Your Style Journey Starts Here</h3>
+              <p className="text-lg opacity-90">Discover the perfect outfit for every occasion</p>
             </div>
-
-            <div className="flex flex-wrap justify-center gap-6 mb-6 md:mb-0">
-              <a href="#" className="text-gray-600 hover:text-blue-500 transition-colors">
-                About
-              </a>
-              <a href="#" className="text-gray-600 hover:text-blue-500 transition-colors">
-                Features
-              </a>
-              <a href="#" className="text-gray-600 hover:text-blue-500 transition-colors">
-                Pricing
-              </a>
-              <a href="#" className="text-gray-600 hover:text-blue-500 transition-colors">
-                Contact
-              </a>
-            </div>
-
-            <p className="text-gray-500 text-sm">© 2025 Style Genie. All rights reserved.</p>
           </div>
         </div>
       </footer>
