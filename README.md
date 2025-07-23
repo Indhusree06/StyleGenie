@@ -1,238 +1,219 @@
-# StyleGenie AI - Smart Wardrobe Management
+# Weather Smart AI - Smart Wardrobe Management
 
-StyleGenie is an AI-powered wardrobe management application that helps you organize your clothes, get outfit recommendations, and manage wardrobes for your entire family.
+Weather Smart AI is an intelligent wardrobe management system that helps you organize your clothing, get personalized outfit recommendations, and manage wardrobes for your entire family.
 
 ## 🌟 Features
 
-### Core Features
-- **Smart Wardrobe Management**: Add, organize, and categorize your clothing items
-- **AI-Powered Chat**: Get personalized outfit recommendations and styling advice
-- **Weather Integration**: Receive weather-appropriate clothing suggestions
-- **Family Profiles**: Separate wardrobes for each family member
-- **Premium Features**: Advanced AI recommendations and unlimited storage
+### 👔 Smart Wardrobe Management
+- **Digital Wardrobe**: Catalog all your clothing items with photos, details, and tags
+- **Family Wardrobes**: Separate wardrobes for each family member with age-appropriate features
+- **Advanced Search & Filtering**: Find items by category, color, season, occasion, and more
+- **Wear Tracking**: Track how often you wear items and when you last wore them
 
-### User Management
-- **Secure Authentication**: Powered by Supabase Auth
-- **User Profiles**: Personalized experience for each user
-- **Premium Subscriptions**: Tiered access to advanced features
+### 🤖 AI-Powered Recommendations
+- **Outfit Suggestions**: Get personalized outfit recommendations based on weather, occasion, and preferences
+- **Weather Integration**: Automatic weather-based clothing suggestions
+- **Style Chat**: Interactive AI assistant for fashion advice and wardrobe questions
+- **Similar Item Discovery**: Find similar items online when you need replacements
 
-### AI Integration
-- **OpenAI Integration**: Advanced AI for outfit recommendations
-- **Smart Suggestions**: Context-aware clothing recommendations
-- **Style Analysis**: AI-powered style insights
+### 👨‍👩‍👧‍👦 Family-Friendly Features
+- **Age-Appropriate Categories**: Different clothing categories for babies, children, teens, and adults
+- **School Uniform Tracking**: Special features for school-age children
+- **Growth Tracking**: Mark items with room for growth
+- **Safety Features**: Track safety features for children's clothing
+
+### 🌤️ Weather Essentials
+- **Weather Wardrobe**: Track weather-specific items like raincoats, winter jackets, etc.
+- **Seasonal Organization**: Organize items by season and weather suitability
+- **Location-Based Suggestions**: Get recommendations based on your location's weather
+
+## Technology Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **Backend**: Supabase (PostgreSQL database, Authentication, Storage)
+- **AI**: OpenAI GPT-4 for outfit recommendations and chat
+- **Deployment**: Vercel
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- Supabase account
-- OpenAI API key
+- Node.js 18+ installed
+- A Supabase account and project
+- OpenAI API key (for AI features)
 
 ### Installation
 
-1. **Clone the repository**
-\`\`\`bash
-git clone <your-repo-url>
-cd stylegenie-ai
-\`\`\`
+1. **Clone the repository**:
+   \`\`\`bash
+   git clone <your-repo-url>
+   cd weathersmart-ai
+   \`\`\`
 
-2. **Install dependencies**
-\`\`\`bash
-npm install
-\`\`\`
+2. **Install dependencies**:
+   \`\`\`bash
+   npm install
+   \`\`\`
 
-3. **Set up environment variables**
-Create a `.env.local` file:
-\`\`\`env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-OPENAI_API_KEY=your_openai_api_key
-\`\`\`
+3. **Set up environment variables**:
+   Create a `.env.local` file in the root directory:
+   \`\`\`env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_KEY=your_supabase_service_key
+   OPENAI_API_KEY=your_openai_api_key
+   \`\`\`
 
-4. **Set up the database**
+4. **Set up the database**:
+   \`\`\`bash
+   # Run the main database setup
+   npm run db:setup
+   
+   # Run the wardrobe profiles migration
+   npm run migrate:wardrobe-profiles
+
+   # (Optional) Add sample data for testing
+   npm run db:seed
+   \`\`\`
+
+5. **Start the development server**:
+   \`\`\`bash
+   npm run dev
+   \`\`\`
+
+6. **Open your browser** and navigate to `http://localhost:3003`
+
+## 🗄️ Database Setup
+
+### Initial Setup
+The app uses Supabase as the backend. Run these commands to set up your database:
+
 \`\`\`bash
-# Run database setup
+# Set up main tables and relationships
 npm run db:setup
 
-# Run wardrobe profile migration (for family member support)
+# Enable separate wardrobes for family members
 npm run migrate:wardrobe-profiles
+
+# (Optional) Add sample data for testing
+npm run db:seed
 \`\`\`
 
-5. **Start the development server**
-\`\`\`bash
-npm run dev
+### Database Schema
+The app uses these main tables:
+- `profiles` - User profiles
+- `wardrobe_profiles` - Family member profiles
+- `wardrobe_items` - Clothing items
+- `categories` - Clothing categories
+- `tags` - Item tags
+- `outfits` - Saved outfits
+- `outfit_recommendations` - AI-generated recommendations
+
+## Project Structure
+
 \`\`\`
-
-Visit `http://localhost:3000` to see your application.
-
-## 📁 Project Structure
-
-\`\`\`
-stylegenie-ai/
-├── app/                    # Next.js App Router pages
+weathersmart-ai/
+├── app/                    # Next.js app directory
 │   ├── api/               # API routes
 │   ├── auth/              # Authentication pages
 │   ├── wardrobe/          # Wardrobe management
-│   ├── wardrobes/         # Family wardrobe profiles
-│   ├── chat/              # AI chat interface
-│   └── ...
+│   ├── wardrobes/         # Family wardrobes
+│   ├── add-clothes/       # Add clothing items
+│   ├── chat/              # AI style chat
+│   └── weather-essentials/ # Weather-based recommendations
 ├── components/            # Reusable React components
 │   ├── ui/               # shadcn/ui components
-│   └── ...
-├── lib/                  # Utility functions
+│   └── ...               # Custom components
 ├── hooks/                # Custom React hooks
-├── scripts/              # Database scripts
+├── lib/                  # Utility functions and services
+├── scripts/              # Database migration scripts
 ├── public/               # Static assets
 └── styles/               # Global styles
 \`\`\`
 
-## 🗄️ Database Schema
+## Key Features Explained
 
-### Core Tables
-- `profiles`: User profile information
-- `wardrobe_profiles`: Family member profiles
-- `wardrobe_items`: Clothing items with profile association
-- `premium_subscriptions`: Premium user management
+### Family Wardrobes
+- Create separate wardrobes for each family member
+- Age-appropriate clothing suggestions
+- Track school uniforms and dress codes
+- Weather essentials for each family member
 
-### Key Relationships
-- Users can have multiple wardrobe profiles (family members)
-- Each wardrobe item belongs to a user and optionally a specific profile
-- Premium features are controlled via subscription status
+### AI Style Chat
+- Chat with AI about fashion and styling questions
+- Get personalized outfit recommendations
+- Ask about color combinations, styling tips, and more
 
-## 🔧 Available Scripts
+### Weather Integration
+- Automatic weather-based outfit suggestions
+- Location-based weather data
+- Seasonal clothing recommendations
+
+### Advanced Filtering
+- Filter by category, season, occasion, color
+- Sort by newest, most worn, favorites
+- Search across all clothing attributes
+
+## Available Scripts
 
 \`\`\`bash
-# Development
-npm run dev              # Start development server
-npm run build           # Build for production
-npm run start           # Start production server
-npm run lint            # Run ESLint
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
 
-# Database Management
-npm run db:setup        # Complete database setup
-npm run db:check        # Check database status
-npm run db:seed         # Seed sample data
+# Database scripts
+npm run db:setup     # Set up database tables
+npm run db:seed      # Add sample data
+npm run db:check     # Check database connection
 npm run migrate:wardrobe-profiles  # Enable family wardrobes
 \`\`\`
 
-## 🏗️ Architecture
-
-### Frontend
-- **Next.js 15**: React framework with App Router
-- **TypeScript**: Type-safe development
-- **Tailwind CSS**: Utility-first styling
-- **shadcn/ui**: Modern UI components
-- **Framer Motion**: Smooth animations
-
-### Backend
-- **Supabase**: Database, authentication, and real-time features
-- **OpenAI API**: AI-powered recommendations
-- **Next.js API Routes**: Server-side logic
-
-### Key Features Implementation
-- **Authentication**: Supabase Auth with custom hooks
-- **Database**: PostgreSQL with Row Level Security
-- **File Storage**: Supabase Storage for clothing images
-- **AI Chat**: OpenAI integration with streaming responses
-- **Real-time Updates**: Supabase real-time subscriptions
-
-## 🔐 Security
-
-- **Row Level Security (RLS)**: Database-level access control
-- **Authentication Required**: Protected routes and API endpoints
-- **Input Validation**: Zod schemas for data validation
-- **Environment Variables**: Secure credential management
-
-## 🌐 Deployment
+## Deployment
 
 ### Vercel (Recommended)
-1. Connect your GitHub repository to Vercel
-2. Add environment variables in Vercel dashboard
-3. Deploy automatically on push to main branch
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Add environment variables in Vercel dashboard
+4. Deploy
 
-### Manual Deployment
-\`\`\`bash
-npm run build
-npm run start
-\`\`\`
+### Other Platforms
+The application can be deployed to any platform that supports Next.js:
+- Netlify
+- Railway
+- DigitalOcean App Platform
+- AWS Amplify
 
-## 📱 Pages Overview
+## Contributing
 
-- `/` - Landing page with features overview
-- `/auth` - Authentication (login/signup)
-- `/home` - Main dashboard
-- `/wardrobe` - Personal wardrobe management
-- `/wardrobes` - Family member wardrobe profiles
-- `/add-clothes` - Add new clothing items
-- `/chat` - AI styling assistant
-- `/weather-essentials` - Weather-based recommendations
-- `/profile` - User profile management
-- `/pricing` - Premium subscription plans
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 🤖 AI Features
+## License
 
-### Chat Assistant
-- Personalized outfit recommendations
-- Style advice and tips
-- Weather-appropriate suggestions
-- Wardrobe organization help
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-### Smart Recommendations
-- Context-aware suggestions
-- Seasonal recommendations
-- Event-appropriate outfits
-- Color coordination advice
-
-## 👥 Family Features
-
-### Wardrobe Profiles
-- Create profiles for family members
-- Separate wardrobes for each person
-- Age-appropriate recommendations
-- Individual style preferences
-
-### Profile Management
-- Add/edit family member details
-- Set age, gender, and style preferences
-- Manage individual wardrobes
-- Privacy controls
-
-## 💎 Premium Features
-
-- Unlimited wardrobe items
-- Advanced AI recommendations
-- Priority customer support
-- Early access to new features
-- Enhanced customization options
-
-## 🛠️ Development
-
-### Adding New Features
-1. Create feature branch
-2. Implement changes
-3. Add tests if applicable
-4. Update documentation
-5. Submit pull request
-
-### Database Changes
-1. Create migration script in `scripts/`
-2. Test migration locally
-3. Update schema documentation
-4. Add to deployment process
-
-## 📞 Support
+## Support
 
 For support and questions:
-- Check the troubleshooting section in migration docs
-- Review error logs in Supabase dashboard
-- Contact support through the application
+- Check the troubleshooting section
+- Review the database migration guide
+- Open an issue on GitHub
+- Check Supabase dashboard for database issues
 
-## 📄 License
+## Roadmap
 
-This project is private and proprietary.
+- [ ] Mobile app (React Native)
+- [ ] Advanced AI styling recommendations
+- [ ] Social features (share outfits)
+- [ ] Shopping integration
+- [ ] Wardrobe analytics and insights
+- [ ] Outfit planning calendar
+- [ ] Style challenges and goals
 
 ---
 
-**StyleGenie AI** - Making fashion personal and intelligent! ✨👗🤖
+**Made with ❤️ for better wardrobe management**

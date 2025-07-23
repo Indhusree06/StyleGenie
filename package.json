@@ -1,13 +1,15 @@
 {
-  "name": "stylegenie-ai",
+  "name": "weathersmart-ai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "next build",
     "db:check": "node scripts/check-and-create-table.js",
+    "db:create-wardrobe": "node scripts/create-wardrobe-table.js",
+    "db:migrate": "node scripts/setup-database.js",
     "db:seed": "node scripts/seed-sample-data.js",
-    "db:setup": "node scripts/setup-database.js",
-    "dev": "next dev",
+    "db:setup": "node scripts/complete-database-setup.js",
+    "dev": "next dev --port 3003",
     "lint": "next lint",
     "migrate:wardrobe-profiles": "node scripts/run-wardrobe-profile-migration.js",
     "start": "next start"
@@ -53,7 +55,6 @@
     "cmdk": "latest",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "latest",
-    "framer-motion": "^11.11.17",
     "input-otp": "latest",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
@@ -69,15 +70,15 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "latest",
-    "zod": "^3.23.8"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/eslint": "^8",
+    "@types/eslint": "^9",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^8",
-    "eslint-config-next": "15.0.3",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.0",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

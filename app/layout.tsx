@@ -7,9 +7,9 @@ import { AuthProvider } from "@/hooks/useAuth"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Style Genie - AI-Powered Wardrobe Assistant",
+  title: "Weather Smart - AI-Powered Wardrobe Assistant",
   description: "Transform your wardrobe with AI-powered styling recommendations",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({

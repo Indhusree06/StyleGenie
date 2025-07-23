@@ -193,7 +193,7 @@ export default function LandingPage() {
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                 <Sparkles className="w-6 h-6 text-black" />
               </div>
-              <span className="text-2xl font-bold text-white">Style Genie</span>
+              <span className="text-2xl font-bold text-white">Weather Smart</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <button
@@ -241,7 +241,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-6 relative z-10">
           <div className="flex flex-col items-center justify-center gap-12">
             <div className="text-center">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">Style Genie</h1>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">Weather Smart</h1>
               <p className="text-lg md:text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
                 Your AI-powered Outfit Selector with intelligent outfit recommendations based on weather, occasion, and
                 your personal style
@@ -263,10 +263,10 @@ export default function LandingPage() {
       <section id="audience" className="py-20 bg-gray-900">
         <div className="container mx-auto px-6">
           <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Made for Moms and Teens</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Made for Families</h2>
             <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-12">
-              Style Genie helps busy moms manage wardrobes for the whole family and empowers teens to develop their own
-              style
+              Weather Smart helps families manage wardrobes for everyone and empowers each family member to develop
+              their own personal style
             </p>
 
             {/* Audience Selection Buttons - Dark Style */}
@@ -447,7 +447,7 @@ export default function LandingPage() {
                 <h3 className="text-2xl font-semibold text-white mb-4">Perfect for the Whole Family</h3>
                 <p className="text-gray-400 max-w-3xl mx-auto text-lg leading-relaxed">
                   Whether you're a busy mom juggling multiple schedules and wardrobes, or a teen exploring your unique
-                  style, Style Genie brings families together through the shared experience of looking and feeling
+                  style, Weather Smart brings families together through the shared experience of looking and feeling
                   great. Our AI understands that every family member has different needs, preferences, and occasions to
                   dress for.
                 </p>
@@ -469,7 +469,7 @@ export default function LandingPage() {
       <section id="features" className="py-20 bg-black">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Why families love Style Genie</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Why families love Weather Smart</h2>
             <p className="text-lg text-gray-400 max-w-2xl mx-auto">
               Real solutions for real wardrobe challenges that busy families face every day
             </p>
@@ -525,7 +525,7 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold text-white mb-4">Rediscover clothes you forgot you had</h3>
               <p className="text-gray-400 leading-relaxed">
-                That cute top buried in the back of the closet? Style Genie remembers it and suggests new ways to wear
+                That cute top buried in the back of the closet? Weather Smart remembers it and suggests new ways to wear
                 it. Make the most of what you already own.
               </p>
             </div>
@@ -578,7 +578,7 @@ export default function LandingPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">How it works</h2>
             <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-              Getting started with Style Genie is simple and takes just a few minutes
+              Getting started with Weather Smart is simple and takes just a few minutes
             </p>
           </div>
 
